@@ -10,7 +10,7 @@ module Raml
       @methods = []
     end
 
-    def url
+    def uri
       File.join(parent.uri, uri_partial)
     end
 
