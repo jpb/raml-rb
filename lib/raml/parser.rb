@@ -29,8 +29,8 @@ module Raml
       end
 
       def parse_root(data)
-        root = Root.new
-        parse_root_attributes(root, data)
+        @root = Root.new
+        parse_root_attributes(@root, data)
       end
 
       def parse_root_attributes(root, data)
@@ -74,7 +74,7 @@ module Raml
               end
             end
           when /^\//
-            resource.resources << parse_resource(resource, key, parse_value(value))
+            root.resources << parse_resource(resource, key, parse_value(value))
           when *%w(get put post delete)
             resource.methods << parse_method(key, parse_value(value))
           else
