@@ -1,5 +1,3 @@
-require 'uri'
-
 module Raml
   class Resource
     ATTRIBUTES = []
@@ -13,7 +11,7 @@ module Raml
     end
 
     def url
-      URI.join(parent.uri, uri_partial)
+      File.join(parent.uri, uri_partial)
     end
 
   end
