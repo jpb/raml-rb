@@ -1,4 +1,10 @@
 require 'yaml'
+require 'raml/errors/unknown_attribute_error'
+require 'raml/root'
+require 'raml/resource'
+require 'raml/method'
+require 'raml/response'
+require 'raml/body'
 
 module Raml
   class Parser
@@ -10,13 +16,7 @@ module Raml
     end
 
     def parse
-      @root = Root.new
-
-      yaml.each do |key, value|
-        parse_root(key, parse_value(value))
-      end
-
-      @root
+      parse_root(yaml)
     end
 
     private
@@ -28,17 +28,26 @@ module Raml
         string.downcase
       end
 
-      def parse_root(key, value)
-        case key
-        when *Root::ATTRIBUTES
-          root.send("#{key}=".to_sym, parse_value(value))
-        when 'traits'
-          parse_traits(parse_value(value))
-        when /^\//
-          root.resources << parse_resource(key, parse_value(value))
-        else
-          raise UnknownAttributeError.new "Unknown root key: #{key}"
+      def parse_root(data)
+        root = Root.new
+        parse_root_attributes(root, data)
+      end
+
+      def parse_root_attributes(root, data)
+        data.each do |key, value|
+          case key
+          when *Root::ATTRIBUTES
+            root.send("#{key}=".to_sym, parse_value(value))
+          when 'traits'
+            parse_traits(parse_value(value))
+          when /^\//
+            root.resources << parse_resource(root, key, parse_value(value))
+          else
+            raise UnknownAttributeError.new "Unknown root key: #{key}"
+          end
         end
+
+        root
       end
 
       def parse_traits(traits)
@@ -93,10 +102,14 @@ module Raml
                 method = parse_method_attributes(method, traits[name])
               end
             end
+          when 'responses'
+            parse_value(value).each do |code, response_data|
+              method.responses << parse_response(code, response_data)
+            end
           else
             raise UnknownAttributeError.new "Unknown method key: #{key}"
           end
-        end
+        end if data
 
         method
       end
@@ -119,8 +132,8 @@ module Raml
               end
             end
           when 'body'
-            parse_value(value).each do |type, data|
-              response.bodies << parse_body(type, data)
+            parse_value(value).each do |type, body_data|
+              response.bodies << parse_body(type, body_data)
             end
           else
             raise UnknownAttributeError.new "Unknown response key: #{key}"
@@ -138,7 +151,7 @@ module Raml
       def parse_body_attributes(body, data)
         data.each do |key, value|
           case key
-          when *Response::ATTRIBUTES
+          when *Body::ATTRIBUTES
             body.send("#{key}=".to_sym, parse_value(value))
           when 'is'
             value = value.is_a?(Array) ? value : [value]
@@ -148,15 +161,15 @@ module Raml
               end
             end
           else
-            raise UnknownAttributeError.new "Unknown response key: #{key}"
+            raise UnknownAttributeError.new "Unknown body key: #{key}"
           end
-        end
+        end if data
 
         body
       end
 
       def parse_value(value)
-        if value.strip.start_with?('include!')
+        if value.is_a?(String) && value.strip.start_with?('include!')
           File.read value.match(/include!(.*)/)[1].strip
         else
           value
