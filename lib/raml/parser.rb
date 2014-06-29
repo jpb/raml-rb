@@ -40,6 +40,8 @@ module Raml
             root.send("#{key}=".to_sym, parse_value(value))
           when 'traits'
             parse_traits(parse_value(value))
+          when 'documentation'
+            parse_documentation(parse_value(value))
           when /^\//
             root.resources << parse_resource(root, key, parse_value(value))
           else
@@ -53,6 +55,20 @@ module Raml
       def parse_traits(traits)
         traits.each do |name, data|
           @traits[name] = data
+        end
+      end
+
+      def parse_documentation(data)
+        data = data.is_a?(Array) ? data : [data]
+
+        data.each do |values|
+          root.documentation << Documentation.new
+          values.each do |key, value|
+            case key
+            when *Documentation::ATTRIBUTES
+              documentation.send("#{key}=".to_sym, parse_value(value))
+            end
+          end
         end
       end
 

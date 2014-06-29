@@ -5,10 +5,11 @@ module Raml
       baseUri
       version
     ]
-    attr_accessor :title, :baseUri, :version, :resources
+    attr_accessor :title, :baseUri, :version, :resources, :documentation
 
     def initialize
       @resources = []
+      @documentation = []
     end
 
     def uri
