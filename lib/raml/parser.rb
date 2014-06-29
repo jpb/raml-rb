@@ -12,7 +12,7 @@ module Raml
       @root = Root.new
 
       yaml.each do |key, value|
-        parse_root(key, value)
+        parse_root(key, parse_value(value))
       end
 
       @root
@@ -30,11 +30,11 @@ module Raml
       def parse_root(key, value)
         case key
         when *Root::ATTRIBUTES
-          root.send("#{key}=".to_sym, value)
+          root.send("#{key}=".to_sym, parse_value(value))
         when /^\//
-          root.resources << parse_resource(key, value)
+          root.resources << parse_resource(key, parse_value(value))
         else
-          raise cli.warn "Unknown root key: #{key}"
+          raise UnknownAttributeError.new "Unknown root key: #{key}"
         end
       end
 
@@ -44,13 +44,13 @@ module Raml
         data.each do |key, value|
           case key
           when *Resource::ATTRIBUTES
-            resource.send("#{key}=".to_sym, value)
+            resource.send("#{key}=".to_sym, parse_value(value))
           when /^\//
-            resource.resources << parse_resource(resource, key, value)
+            resource.resources << parse_resource(resource, key, parse_value(value))
           when *%w(get put post delete)
-            resource.methods << parse_method(key, value)
+            resource.methods << parse_method(key, parse_value(value))
           else
-            raise cli.warn "Unknown resource key: #{key}"
+            raise UnknownAttributeError.new "Unknown resource key: #{key}"
           end
         end
 
@@ -63,9 +63,9 @@ module Raml
         data.each do |key, value|
           case key
           when *Method::ATTRIBUTES
-            method.send("#{key}=".to_sym, value)
+            method.send("#{key}=".to_sym, parse_value(value))
           else
-            raise cli.warn "Unknown method key: #{key}"
+            raise UnknownAttributeError.new "Unknown method key: #{key}"
           end
         end
 
@@ -78,13 +78,13 @@ module Raml
         data.each do |key, value|
           case key
           when *Response::ATTRIBUTES
-            response.send("#{key}=".to_sym, value)
+            response.send("#{key}=".to_sym, parse_value(value))
           when 'body'
-            value.each do |type, data|
+            parse_value(value).each do |type, data|
               response.bodies << parse_body(type, data)
             end
           else
-            raise cli.warn "Unknown response key: #{key}"
+            raise UnknownAttributeError.new "Unknown response key: #{key}"
           end
         end
 
@@ -95,11 +95,24 @@ module Raml
         body = Body.new(type)
 
         data.each do |key, value|
+          case key
+          when *Response::ATTRIBUTES
+            response.send("#{key}=".to_sym, parse_value(value))
+          else
+            raise UnknownAttributeError.new "Unknown response key: #{key}"
+          end
         end
 
         body
       end
 
+      def parse_value(value)
+        if value.strip.start_with?('include!')
+          File.read value.match(/include!(.*)/)[1].strip
+        else
+          value
+        end
+      end
 
   end
 end
