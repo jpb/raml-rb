@@ -11,10 +11,10 @@ module Raml
 
       ATTRIBUTES = BASIC_ATTRIBUTES = %w[description headers]
 
-      attr_accessor :parent
+      attr_accessor :root
 
-      def initialize(parent)
-        @parent = parent
+      def initialize(root)
+        @root = root
       end
 
       def parse(action, data)
@@ -33,17 +33,17 @@ module Raml
             when 'is'
               value = value.is_a?(Array) ? value : [value]
               value.each do |name|
-                unless parent.traits[name].nil?
-                  method = parse_attributes(method, parent.traits[name])
+                unless root.traits[name].nil?
+                  method = parse_attributes(method, root.traits[name])
                 end
               end
             when 'responses'
               parse_value(value).each do |code, response_data|
-                method.responses << Raml::Parser::Response.new(self).parse(code, response_data)
+                method.responses << Raml::Parser::Response.new(root).parse(code, response_data)
               end
             when 'query_parameters'
               parse_value(value).each do |name, parameter_data|
-                method.query_parameters << Raml::Parser::QueryParameter.new(self).parse(name, parameter_data)
+                method.query_parameters << Raml::Parser::QueryParameter.new(root).parse(name, parameter_data)
               end
             else
               raise UnknownAttributeError.new "Unknown method key: #{key}"

@@ -8,10 +8,10 @@ module Raml
       include Raml::Parser::Util
       ATTRIBUTES = BASIC_ATTRIBUTES = %w[schema]
 
-      attr_accessor :parent
+      attr_accessor :root
 
-      def initialize(parent)
-        @parent = parent
+      def initialize(root)
+        @root = root
       end
 
       def parse(type, data)
@@ -30,8 +30,8 @@ module Raml
             when 'is'
               value = value.is_a?(Array) ? value : [value]
               value.each do |name|
-                unless parent.traits[name].nil?
-                  body = parse_attributes(body, parent.traits[name])
+                unless root.traits[name].nil?
+                  body = parse_attributes(body, root.traits[name])
                 end
               end
             else

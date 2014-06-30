@@ -10,10 +10,10 @@ module Raml
 
       BASIC_ATTRIBUTES = ATTRIBUTES = %w[]
 
-      attr_accessor :parent
+      attr_accessor :root
 
-      def initialize(parent)
-        @parent = parent
+      def initialize(root)
+        @root = root
       end
 
       def parse(code, data)
@@ -38,7 +38,7 @@ module Raml
               end
             when 'body'
               parse_value(value).each do |type, body_data|
-                response.bodies << Raml::Parser::Body.new(self).parse(type, body_data)
+                response.bodies << Raml::Parser::Body.new(root).parse(type, body_data)
               end
             else
               raise UnknownAttributeError.new "Unknown response key: #{key}"
