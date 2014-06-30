@@ -1,6 +1,5 @@
 module Raml
   class Resource
-    ATTRIBUTES = %w[]
     attr_accessor :parent, :methods, :uri_partial
 
     def initialize(parent, uri_partial)
