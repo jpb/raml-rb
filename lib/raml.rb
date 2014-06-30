@@ -6,6 +6,7 @@ require 'raml/resource'
 require 'raml/method'
 require 'raml/response'
 require 'raml/body'
+require 'raml/query_parameter'
 
 module Raml
 end

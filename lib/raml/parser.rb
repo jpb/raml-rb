@@ -5,6 +5,7 @@ require 'raml/resource'
 require 'raml/method'
 require 'raml/response'
 require 'raml/body'
+require 'raml/query_parameter'
 
 module Raml
   class Parser
@@ -122,6 +123,10 @@ module Raml
             parse_value(value).each do |code, response_data|
               method.responses << parse_response(code, response_data)
             end
+          when 'queryParameters'
+            parse_value(value).each do |name, parameter_data|
+              method.query_parameters << parse_query_parameter(name, parameter_data)
+            end
           else
             raise UnknownAttributeError.new "Unknown method key: #{key}"
           end
@@ -157,6 +162,31 @@ module Raml
         end
 
         response
+      end
+
+      def parse_query_parameter(name, data)
+        query_parameter = QueryParameter.new(name)
+        parse_query_parameter_attributes(query_parameter, data)
+      end
+
+      def parse_query_parameter_attributes(query_parameter, data)
+        data.each do |key, value|
+          case key
+          when *QueryParameter::ATTRIBUTES
+            query_parameter.send("#{key}=".to_sym, parse_value(value))
+          when 'is'
+            value = value.is_a?(Array) ? value : [value]
+            value.each do |name|
+              unless traits[name].nil?
+                body = parse_query_paramter_attributes(query_parameter, traits[name])
+              end
+            end
+          else
+            raise UnknownAttributeError.new "Unknown query paramter key: #{key}"
+          end
+        end if data
+
+        query_parameter
       end
 
       def parse_body(type, data)
