@@ -13,7 +13,7 @@ module Raml
     end
 
     def uri
-      baseUri
+      baseUri.sub('{version}', version.to_s)
     end
 
   end
