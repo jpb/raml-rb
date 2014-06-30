@@ -9,10 +9,10 @@ module Raml
 
       ATTRIBUTES = BASIC_ATTRIBUTES = %w[title content]
 
-      attr_accessor :root
+      attr_accessor :parent
 
-      def initialize(root)
-        @root = root
+      def initialize(parent)
+        @parent = parent
       end
 
       def parse_documentation(data)

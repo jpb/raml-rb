@@ -9,10 +9,10 @@ module Raml
 
       BASIC_ATTRIBUTES = ATTRIBUTES = %w[description type example]
 
-      attr_accessor :root
+      attr_accessor :parent
 
-      def initialize(root)
-        @root = root
+      def initialize(parent)
+        @parent = parent
       end
 
       def parse(name, data)
@@ -31,8 +31,8 @@ module Raml
             when 'is'
               value = value.is_a?(Array) ? value : [value]
               value.each do |name|
-                unless root.traits[name].nil?
-                  body = parse_query_paramter_attributes(query_parameter, root.traits[name])
+                unless parent.traits[name].nil?
+                  body = parse_query_paramter_attributes(query_parameter, parent.traits[name])
                 end
               end
             else

@@ -10,15 +10,15 @@ module Raml
 
       BASIC_ATTRIBUTES = ATTRIBUTES = %w[]
 
-      attr_accessor :root_node, :root
+      attr_accessor :root, :parent
 
-      def initialize(root_node, root)
-        @root_node = root_node
+      def initialize(root, parent)
         @root = root
+        @parent = parent
       end
 
-      def parse(root, uri_partial, data)
-        resource = Raml::Resource.new(root, uri_partial)
+      def parse(parent, uri_partial, data)
+        resource = Raml::Resource.new(parent, uri_partial)
         parse_attributes(resource, data)
       end
 
@@ -33,14 +33,14 @@ module Raml
             when 'is'
               value = value.is_a?(Array) ? value : [value]
               value.each do |name|
-                unless root.traits[name].nil?
-                  resource = parse_attributes(resource, root.traits[name])
+                unless parent.traits[name].nil?
+                  resource = parse_attributes(resource, parent.traits[name])
                 end
               end
             when /^\//
-              root_node.resources << Raml::Parser::Resource.new(root_node, root).parse(resource, key, parse_value(value))
+              root.resources << Raml::Parser::Resource.new(root, self).parse(resource, key, parse_value(value))
             when *%w(get put post delete)
-              resource.methods << Raml::Parser::Method.new(root).parse(key, parse_value(value))
+              resource.methods << Raml::Parser::Method.new(self).parse(key, parse_value(value))
             else
               raise UnknownAttributeError.new "Unknown resource key: #{key}"
             end
