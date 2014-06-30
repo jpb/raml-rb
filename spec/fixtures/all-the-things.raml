@@ -1,0 +1,54 @@
+#%RAML 0.8
+
+title: World Music API
+baseUri: http://example.api.com/{version}
+version: v1
+documentation:
+  - title: RAML Baml
+    content: |
+      - Project: [source code](https://github.com/jpb/raml-rb)
+traits:
+  - paged:
+      queryParameters:
+        pages:
+          description: The number of pages to return
+          type: number
+  - secured: !include http://raml-example.com/secured.yml
+/songs:
+  is: [ paged, secured ]
+  get:
+    queryParameters:
+      genre:
+        description: filter the songs by genre
+  post:
+  /{songId}:
+    get:
+      responses:
+        200:
+          body:
+            text/xml:
+              schema: |
+                <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                  <xs:element name="api-request">
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element type="xs:string" name="title"/>
+                        <xs:element type="xs:string" name="artist"/>
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:schema>
+            application/json:
+              schema: |
+                { "$schema": "http://json-schema.org/schema",
+                  "type": "object",
+                  "description": "A canonical song",
+                  "properties": {
+                    "title":  { "type": "string" },
+                    "artist": { "type": "string" }
+                  },
+                  "required": [ "title", "artist" ]
+                }
+    delete:
+      description: |
+        This method will *delete* an **individual song**
