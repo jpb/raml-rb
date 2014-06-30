@@ -1,6 +1,6 @@
 module Raml
   class Method
-    ATTRIBUTES = ['description', 'headers']
+    ATTRIBUTES = %w[description headers]
 
     attr_accessor :action, :description, :headers, :responses, :query_parameters
 

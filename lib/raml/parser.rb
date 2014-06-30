@@ -23,10 +23,10 @@ module Raml
     private
 
       def underscore(string)
-        string.gsub!(/([A-Z]+)([A-Z][a-z])/,'\1_\2')
-        string.gsub!(/([a-z\d])([A-Z])/,'\1_\2')
-        string.tr!('-', '_')
-        string.downcase
+        string.gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2')
+          .gsub(/([a-z\d])([A-Z])/,'\1_\2')
+          .tr('-', '_')
+          .downcase
       end
 
       def parse_root(data)
@@ -36,6 +36,7 @@ module Raml
 
       def parse_root_attributes(root, data)
         data.each do |key, value|
+          key = underscore(key)
           case key
           when *Root::ATTRIBUTES
             root.send("#{key}=".to_sym, parse_value(value))
@@ -65,6 +66,7 @@ module Raml
         data.each do |values|
           root.documentation << Documentation.new
           values.each do |key, value|
+            key = underscore(key)
             case key
             when *Documentation::ATTRIBUTES
               documentation.send("#{key}=".to_sym, parse_value(value))
@@ -80,6 +82,7 @@ module Raml
 
       def parse_resource_attributes(resource, data)
         data.each do |key, value|
+          key = underscore(key)
           case key
           when *Resource::ATTRIBUTES
             resource.send("#{key}=".to_sym, parse_value(value))
@@ -109,6 +112,7 @@ module Raml
 
       def parse_method_attributes(method, data)
         data.each do |key, value|
+          key = underscore(key)
           case key
           when *Method::ATTRIBUTES
             method.send("#{key}=".to_sym, parse_value(value))
@@ -123,7 +127,7 @@ module Raml
             parse_value(value).each do |code, response_data|
               method.responses << parse_response(code, response_data)
             end
-          when 'queryParameters'
+          when 'query_parameters'
             parse_value(value).each do |name, parameter_data|
               method.query_parameters << parse_query_parameter(name, parameter_data)
             end
@@ -142,6 +146,7 @@ module Raml
 
       def parse_response_attributes(response, data)
         data.each do |key, value|
+          key = underscore(key)
           case key
           when *Response::ATTRIBUTES
             response.send("#{key}=".to_sym, parse_value(value))
@@ -171,6 +176,7 @@ module Raml
 
       def parse_query_parameter_attributes(query_parameter, data)
         data.each do |key, value|
+          key = underscore(key)
           case key
           when *QueryParameter::ATTRIBUTES
             query_parameter.send("#{key}=".to_sym, parse_value(value))
@@ -196,6 +202,7 @@ module Raml
 
       def parse_body_attributes(body, data)
         data.each do |key, value|
+          key = underscore(key)
           case key
           when *Body::ATTRIBUTES
             body.send("#{key}=".to_sym, parse_value(value))

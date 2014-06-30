@@ -12,7 +12,7 @@ describe Raml::Root do
 
   describe '#uri' do
     let(:root) { Raml::Root.new }
-    before { root.baseUri = 'http://example.com' }
+    before { root.base_uri = 'http://example.com' }
     subject { root.uri }
     it { should == 'http://example.com' }
   end

@@ -1,11 +1,7 @@
 module Raml
   class Root
-    ATTRIBUTES = %w[
-      title
-      baseUri
-      version
-    ]
-    attr_accessor :title, :baseUri, :version, :resources, :documentation
+    ATTRIBUTES = %w[title base_uri version]
+    attr_accessor :title, :base_uri, :version, :resources, :documentation
 
     def initialize
       @resources = []
@@ -13,7 +9,7 @@ module Raml
     end
 
     def uri
-      baseUri.sub('{version}', version.to_s)
+      base_uri.sub('{version}', version.to_s)
     end
 
   end

@@ -1,6 +1,6 @@
 module Raml
   class Documentation
-    ATTRIBUTES = ['title', 'content']
+    ATTRIBUTES = %w[title content]
     attr_accessor :title, :content
   end
 end
