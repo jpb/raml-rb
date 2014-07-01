@@ -11,46 +11,44 @@ module Raml
 
       ATTRIBUTES = BASIC_ATTRIBUTES = %w[description headers]
 
-      attr_accessor :parent
+      attr_accessor :root, :parent, :method, :trait_names
 
-      def initialize(parent)
+      def initialize(root, parent)
+        @root = root
         @parent = parent
+        @trait_names = []
       end
 
       def parse(action, data)
-        method = Raml::Method.new(action)
-        parse_attributes(method, data)
+        @method = Raml::Method.new(action)
+        data = prepare_attributes(data)
+        set_trait_names(data)
+        apply_parents_traits
+        parse_attributes(data)
+        method
       end
 
       private
 
-        def parse_attributes(method, data)
+        def parse_attributes(data)
           data.each do |key, value|
-            key = underscore(key)
             case key
             when *BASIC_ATTRIBUTES
               method.send("#{key}=".to_sym, parse_value(value))
             when 'is'
-              value = value.is_a?(Array) ? value : [value]
-              value.each do |name|
-                unless parent.traits[name].nil?
-                  method = parse_attributes(method, parent.traits[name])
-                end
-              end
+              apply_traits(parse_value(value))
             when 'responses'
               parse_value(value).each do |code, response_data|
-                method.responses << Raml::Parser::Response.new(self).parse(code, response_data)
+                method.responses << Raml::Parser::Response.new(root, self).parse(code, response_data)
               end
             when 'query_parameters'
               parse_value(value).each do |name, parameter_data|
-                method.query_parameters << Raml::Parser::QueryParameter.new(self).parse(name, parameter_data)
+                method.query_parameters << Raml::Parser::QueryParameter.new(root, self).parse(name, parameter_data)
               end
             else
               raise UnknownAttributeError.new "Unknown method key: #{key}"
             end
           end if data
-
-          method
         end
 
     end

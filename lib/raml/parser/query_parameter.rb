@@ -9,38 +9,37 @@ module Raml
 
       BASIC_ATTRIBUTES = ATTRIBUTES = %w[description type example]
 
-      attr_accessor :parent
+      attr_accessor :root, :parent, :query_parameter, :trait_names
 
-      def initialize(parent)
+      def initialize(root, parent)
+        @root = root
         @parent = parent
+        @trait_names = []
       end
 
       def parse(name, data)
-        query_parameter = Raml::QueryParameter.new(name)
-        parse_attributes(query_parameter, data)
+        @query_parameter = Raml::QueryParameter.new(name)
+        data = prepare_attributes(data)
+        set_trait_names(data)
+        apply_parents_traits
+        parse_attributes(data)
+        query_parameter
       end
 
       private
 
-        def parse_attributes(query_parameter, data)
+        def parse_attributes(data)
           data.each do |key, value|
             key = underscore(key)
             case key
             when *BASIC_ATTRIBUTES
               query_parameter.send("#{key}=".to_sym, parse_value(value))
             when 'is'
-              value = value.is_a?(Array) ? value : [value]
-              value.each do |name|
-                unless parent.traits[name].nil?
-                  body = parse_query_paramter_attributes(query_parameter, parent.traits[name])
-                end
-              end
+              apply_traits(parse_value(value))
             else
               raise UnknownAttributeError.new "Unknown query paramter key: #{key}"
             end
           end if data
-
-          query_parameter
         end
 
     end

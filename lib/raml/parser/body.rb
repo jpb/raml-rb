@@ -8,38 +8,36 @@ module Raml
       include Raml::Parser::Util
       ATTRIBUTES = BASIC_ATTRIBUTES = %w[schema]
 
-      attr_accessor :parent
+      attr_accessor :root, :parent, :body, :trait_names
 
-      def initialize(parent)
+      def initialize(root, parent)
+        @root = root
         @parent = parent
+        @trait_names = []
       end
 
       def parse(type, data)
-        body = Raml::Body.new(type)
-        parse_attributes(body, data)
+        @body = Raml::Body.new(type)
+        data = prepare_attributes(data)
+        set_trait_names(data)
+        apply_parents_traits
+        parse_attributes(data)
+        body
       end
 
       private
 
-        def parse_attributes(body, data)
+        def parse_attributes(data)
           data.each do |key, value|
-            key = underscore(key)
             case key
             when *BASIC_ATTRIBUTES
-              body.send("#{key}=".to_sym, parse_value(value))
+              body.send("#{key}=".to_sym, value)
             when 'is'
-              value = value.is_a?(Array) ? value : [value]
-              value.each do |name|
-                unless parent.traits[name].nil?
-                  body = parse_attributes(body, parent.traits[name])
-                end
-              end
+              apply_traits(value)
             else
               raise UnknownAttributeError.new "Unknown body key: #{key}"
             end
           end if data
-
-          body
         end
 
     end

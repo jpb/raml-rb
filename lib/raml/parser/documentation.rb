@@ -9,22 +9,32 @@ module Raml
 
       ATTRIBUTES = BASIC_ATTRIBUTES = %w[title content]
 
-      attr_accessor :parent
+      attr_accessor :root, :parent, :documentation, :trait_names
 
-      def initialize(parent)
+      def initialize(root, parent)
+        @root = root
         @parent = parent
+        @trait_names = []
       end
 
-      def parse_documentation(data)
-        documentation << Raml::Documentation.new
-        values.each do |key, value|
-          key = underscore(key)
+      def parse(data)
+        @documentation = Raml::Documentation.new
+        data = prepare_attributes(data)
+        set_trait_names(data)
+        apply_parents_traits
+        parse_attributes(data)
+        documentation
+      end
+
+      def parse_attributes(data)
+        data.each do |key, value|
           case key
           when *BASIC_ATTRIBUTES
-            documentation.send("#{key}=".to_sym, parse_value(value))
+            documentation.send("#{key}=".to_sym, value)
+          when 'is'
+            apply_traits(value)
           end
         end
-        documentation
       end
 
     end

@@ -12,20 +12,22 @@ module Raml
       BASIC_ATTRIBUTES = %w[title base_uri version]
       ATTRIBUTES = BASIC_ATTRIBUTES + %w[traits documentation]
 
-      attr_accessor :traits
+      attr_accessor :traits, :root, :trait_names
 
       def initialize
         @traits = {}
+        @trait_names = []
       end
 
       def parse(data)
-        root = Raml::Root.new
-        parse_attributes(root, data)
+        @root = Raml::Root.new
+        parse_attributes(data)
+        root
       end
 
       private
 
-        def parse_attributes(root, data)
+        def parse_attributes(data)
           data.each do |key, value|
             key = underscore(key)
             case key
@@ -36,16 +38,14 @@ module Raml
             when 'documentation'
               data = data.is_a?(Array) ? data : [data]
               data.each do |values|
-                root.documentations << Raml::Parser::Documentation.new(self).parse(parse_value(value))
+                root.documentations << Raml::Parser::Documentation.new(self, self).parse(parse_value(value))
               end
             when /^\//
-              root.resources << Raml::Parser::Resource.new(root, self).parse(root, key, parse_value(value))
+              root.resources << Raml::Parser::Resource.new(self, self).parse(root, root, key, parse_value(value))
             else
               raise UnknownAttributeError.new "Unknown root key: #{key}"
             end
           end
-
-          root
         end
 
         def parse_traits(traits)
