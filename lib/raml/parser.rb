@@ -9,14 +9,22 @@ require 'raml/parser/query_parameter'
 
 module Raml
   class Parser
-    attr_accessor :yaml
 
-    def initialize(yaml)
-      @yaml = YAML.load(yaml)
+    def parse(yaml)
+      raml = YAML.load(yaml)
+      Raml::Parser::Root.new.parse(raml)
     end
 
-    def parse
-      Parser::Root.new.parse(yaml)
+    def parse_file(path)
+      parse File.read(path)
+    end
+
+    def self.parse(yaml)
+      self.new.parse(yaml)
+    end
+
+    def self.parse_file(path)
+      self.new.parse_file(path)
     end
 
   end
