@@ -1,17 +1,18 @@
 require 'raml/body'
 require 'raml/parser/util'
+require 'raml/parser/traitable'
 require 'raml/errors/unknown_attribute_error'
 
 module Raml
   class Parser
     class Body
       include Raml::Parser::Util
+      include Raml::Parser::Traitable
+
       ATTRIBUTES = BASIC_ATTRIBUTES = %w[schema]
+      attr_accessor :parent, :body, :trait_names
 
-      attr_accessor :root, :parent, :body, :trait_names
-
-      def initialize(root, parent)
-        @root = root
+      def initialize(parent)
         @parent = parent
         @trait_names = []
       end

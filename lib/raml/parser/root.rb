@@ -2,6 +2,7 @@ require 'raml/root'
 require 'raml/parser/resource'
 require 'raml/parser/documentation'
 require 'raml/parser/util'
+require 'raml/parser/traitable'
 require 'raml/errors/unknown_attribute_error'
 
 module Raml
@@ -38,10 +39,10 @@ module Raml
             when 'documentation'
               data = data.is_a?(Array) ? data : [data]
               data.each do |values|
-                root.documentations << Raml::Parser::Documentation.new(self, self).parse(parse_value(value))
+                root.documentations << Raml::Parser::Documentation.new(self).parse(parse_value(value))
               end
             when /^\//
-              root.resources << Raml::Parser::Resource.new(self, self).parse(root, root, key, parse_value(value))
+              root.resources << Raml::Parser::Resource.new(self).parse(root, key, parse_value(value))
             else
               raise UnknownAttributeError.new "Unknown root key: #{key}"
             end

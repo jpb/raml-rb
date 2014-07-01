@@ -1,19 +1,20 @@
 require 'raml/response'
 require 'raml/parser/body'
 require 'raml/parser/util'
+require 'raml/parser/traitable'
 require 'raml/errors/unknown_attribute_error'
 
 module Raml
   class Parser
     class Response
       include Raml::Parser::Util
+      include Raml::Parser::Traitable
 
       BASIC_ATTRIBUTES = ATTRIBUTES = %w[]
 
-      attr_accessor :root, :parent, :response, :trait_names
+      attr_accessor :parent, :response, :trait_names
 
-      def initialize(root, parent)
-        @root = root
+      def initialize(parent)
         @parent = parent
         @trait_names = []
       end
@@ -39,7 +40,7 @@ module Raml
               apply_traits(parse_value(value))
             when 'body'
               parse_value(value).each do |type, body_data|
-                response.bodies << Raml::Parser::Body.new(root, self).parse(type, body_data)
+                response.bodies << Raml::Parser::Body.new(self).parse(type, body_data)
               end
             else
               raise UnknownAttributeError.new "Unknown response key: #{key}"

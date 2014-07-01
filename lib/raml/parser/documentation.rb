@@ -1,18 +1,19 @@
 require 'raml/documentation'
 require 'raml/parser/util'
+require 'raml/parser/traitable'
 require 'raml/errors/unknown_attribute_error'
 
 module Raml
   class Parser
     class Documentation
       include Raml::Parser::Util
+      include Raml::Parser::Traitable
 
       ATTRIBUTES = BASIC_ATTRIBUTES = %w[title content]
 
-      attr_accessor :root, :parent, :documentation, :trait_names
+      attr_accessor :parent, :documentation, :trait_names
 
-      def initialize(root, parent)
-        @root = root
+      def initialize(parent)
         @parent = parent
         @trait_names = []
       end
