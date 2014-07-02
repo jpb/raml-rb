@@ -8,6 +8,7 @@ describe Raml::Parser::Root do
     subject { Raml::Parser::Root.new.parse(raml) }
 
     it { should be_kind_of Raml::Root }
+    its(:base_uri) { should == 'http://example.api.com/{version}' }
     its(:uri) { should == 'http://example.api.com/v1' }
     its(:version) { should == 'v1' }
     its('resources.count') { should == 2 }
