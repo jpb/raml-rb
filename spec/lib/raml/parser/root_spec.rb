@@ -13,11 +13,18 @@ describe Raml::Parser::Root do
     its(:uri) { should == 'http://example.api.com/v1' }
     its(:version) { should == 'v1' }
 
-    context 'traits' do
+    context 'trait-inherited attributes' do
       subject { Raml::Parser::Root.new.parse(raml).resources.fetch(1).methods.first.query_parameters.first }
       its(:name) { should == 'pages' }
       its(:description) { should == 'The number of pages to return' }
       its(:type) { should == 'number' }
+    end
+
+    context 'non trait-inherited attributes' do
+      subject { Raml::Parser::Root.new.parse(raml).resources.fetch(1).methods.first.query_parameters.last }
+      its(:name) { should == 'genre' }
+      its(:description) { should == 'filter the songs by genre' }
+      its(:type) { should == nil }
     end
   end
 
