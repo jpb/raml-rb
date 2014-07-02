@@ -8,10 +8,13 @@ describe Raml::Parser::Root do
     subject { Raml::Parser::Root.new.parse(raml) }
 
     it { should be_kind_of Raml::Root }
-    its('resources.count') { should == 2 }
-    its('documentation.count') { should == 0 }
     its(:uri) { should == 'http://example.api.com/v1' }
     its(:version) { should == 'v1' }
+    its('resources.count') { should == 2 }
+    its('resources.first.methods.count') { should == 2 }
+    its('resources.first.methods.first.responses.count') { should == 1 }
+    its('resources.first.methods.first.query_parameters.count') { should == 1 }
+    its('documentation.count') { should == 0 }
 
     context 'trait-inherited attributes' do
       subject { Raml::Parser::Root.new.parse(raml).resources.fetch(1).methods.first.query_parameters.first }
