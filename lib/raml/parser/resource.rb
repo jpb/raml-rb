@@ -1,30 +1,24 @@
 require 'forwardable'
 require 'raml/resource'
 require 'raml/parser/method'
-require 'raml/parser/util'
-require 'raml/parser/traitable'
+require 'raml/parser/node'
 require 'raml/errors/unknown_attribute_error'
 
 module Raml
   class Parser
-    class Resource
+    class Resource < Node
       extend Forwardable
-      include Raml::Parser::Util
-      include Raml::Parser::Traitable
 
-      BASIC_ATTRIBUTES = ATTRIBUTES = %w[]
+      METHODS = %w[get put post delete]
+      BASIC_ATTRIBUTES = %w[]
+      ATTRIBUTES = METHODS + BASIC_ATTRIBUTES + [/^\//]
 
-      attr_accessor :parent, :parent_node, :resource, :trait_names
+      attr_accessor :parent_node, :resource
       def_delegators :@parent_node, :resources
-
-      def initialize(parent)
-        @parent = parent
-        @trait_names = []
-      end
 
       def parse(parent_node, uri_partial, data)
         @parent_node = parent_node
-        @resource = Raml::Resource.new(parent, uri_partial)
+        @resource = Raml::Resource.new(@parent_node, uri_partial)
         data = prepare_attributes(data)
         set_trait_names(data)
         apply_parents_traits
@@ -44,7 +38,7 @@ module Raml
               apply_traits(parse_value(value))
             when /^\//
               resources << Raml::Parser::Resource.new(self).parse(resource, key, parse_value(value))
-            when *%w(get put post delete)
+            when *METHODS
               resource.methods << Raml::Parser::Method.new(self).parse(key, parse_value(value))
             else
               raise UnknownAttributeError.new "Unknown resource key: #{key}"

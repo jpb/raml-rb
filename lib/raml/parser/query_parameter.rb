@@ -1,22 +1,14 @@
 require 'raml/query_parameter'
-require 'raml/parser/util'
-require 'raml/parser/traitable'
+require 'raml/parser/node'
 require 'raml/errors/unknown_attribute_error'
 
 module Raml
   class Parser
-    class QueryParameter
-      include Raml::Parser::Util
-      include Raml::Parser::Traitable
+    class QueryParameter < Node
 
       BASIC_ATTRIBUTES = ATTRIBUTES = %w[description type example]
 
-      attr_accessor :parent, :query_parameter, :trait_names
-
-      def initialize(parent)
-        @parent = parent
-        @trait_names = []
-      end
+      attr_accessor :query_parameter
 
       def parse(name, data)
         @query_parameter = Raml::QueryParameter.new(name)

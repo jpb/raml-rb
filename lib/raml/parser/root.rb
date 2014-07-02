@@ -2,7 +2,6 @@ require 'raml/root'
 require 'raml/parser/resource'
 require 'raml/parser/documentation'
 require 'raml/parser/util'
-require 'raml/parser/traitable'
 require 'raml/errors/unknown_attribute_error'
 
 module Raml
@@ -13,7 +12,7 @@ module Raml
       BASIC_ATTRIBUTES = %w[title base_uri version]
       ATTRIBUTES = BASIC_ATTRIBUTES + %w[traits documentation]
 
-      attr_accessor :traits, :root, :trait_names
+      attr_accessor :root, :traits, :trait_names
 
       def initialize
         @traits = {}
@@ -50,8 +49,10 @@ module Raml
         end
 
         def parse_traits(traits)
-          traits.each do |name, data|
-            @traits[name] = data
+          traits.each do |trait|
+            trait.each do |name, data|
+              @traits[name] = data
+            end
           end
         end
 

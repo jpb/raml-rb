@@ -2,23 +2,17 @@ require 'raml/method'
 require 'raml/parser/response'
 require 'raml/parser/query_parameter'
 require 'raml/parser/util'
-require 'raml/parser/traitable'
+require 'raml/parser/node'
 require 'raml/errors/unknown_attribute_error'
 
 module Raml
   class Parser
-    class Method
-      include Raml::Parser::Util
-      include Raml::Parser::Traitable
+    class Method < Node
 
-      ATTRIBUTES = BASIC_ATTRIBUTES = %w[description headers]
+      BASIC_ATTRIBUTES = %w[description headers]
+      ATTRIBUTES = BASIC_ATTRIBUTES + %w[responses query_parameters]
 
-      attr_accessor :parent, :method, :trait_names
-
-      def initialize(parent)
-        @parent = parent
-        @trait_names = []
-      end
+      attr_accessor :method
 
       def parse(action, data)
         @method = Raml::Method.new(action)

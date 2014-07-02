@@ -3,6 +3,7 @@ module Raml
     module Util
 
       private
+
         def prepare_attributes(data)
           hash = {}
           data.each do |key, value|

@@ -1,23 +1,15 @@
 require 'raml/response'
 require 'raml/parser/body'
-require 'raml/parser/util'
-require 'raml/parser/traitable'
 require 'raml/errors/unknown_attribute_error'
 
 module Raml
   class Parser
-    class Response
-      include Raml::Parser::Util
-      include Raml::Parser::Traitable
+    class Response < Node
 
-      BASIC_ATTRIBUTES = ATTRIBUTES = %w[]
+      BASIC_ATTRIBUTES = %w[]
+      ATTRIBUTES = BASIC_ATTRIBUTES + %w[body]
 
-      attr_accessor :parent, :response, :trait_names
-
-      def initialize(parent)
-        @parent = parent
-        @trait_names = []
-      end
+      attr_accessor :response
 
       def parse(code, data)
         @response = Raml::Response.new(code)
