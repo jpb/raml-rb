@@ -6,14 +6,14 @@ module Raml
   class Parser
     class QueryParameter < Node
 
-      BASIC_ATTRIBUTES = ATTRIBUTES = %w[description type example]
+      BASIC_ATTRIBUTES = %w[description type example]
 
       attr_accessor :query_parameter
 
       def parse(name, data)
         @query_parameter = Raml::QueryParameter.new(name)
 
-        data = prepare_attributes(data)
+        @data = prepare_attributes(data)
         parse_attributes(data)
 
         query_parameter
@@ -26,7 +26,7 @@ module Raml
             key = underscore(key)
             case key
             when *BASIC_ATTRIBUTES
-              query_parameter.send("#{key}=".to_sym, parse_value(value))
+              query_parameter.send("#{key}=".to_sym, value)
             else
               raise UnknownAttributeError.new "Unknown query paramter key: #{key}"
             end

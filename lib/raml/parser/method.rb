@@ -10,42 +10,57 @@ module Raml
     class Method < Node
 
       BASIC_ATTRIBUTES = %w[description headers]
-      ATTRIBUTES = BASIC_ATTRIBUTES + %w[responses query_parameters]
 
       attr_accessor :method
 
       def parse(the_method, data)
         @method = Raml::Method.new(the_method)
+        @data = prepare_attributes(data)
 
-        data = prepare_attributes(data)
-        set_trait_names(data)
         apply_parents_traits
-        parse_attributes(data)
+        parse_attributes
 
         method
       end
 
       private
 
-        def parse_attributes(data)
-          data.each do |key, value|
+        def parse_attributes(attributes = @data)
+          attributes.each do |key, value|
             case key
             when *BASIC_ATTRIBUTES
-              method.send("#{key}=".to_sym, parse_value(value))
+              method.send("#{key}=".to_sym, value)
             when 'is'
-              apply_traits(parse_value(value))
+              apply_traits(value)
             when 'responses'
-              parse_value(value).each do |code, response_data|
+              value.each do |code, response_data|
                 method.responses << Raml::Parser::Response.new(self).parse(code, response_data)
               end
             when 'query_parameters'
-              parse_value(value).each do |name, parameter_data|
+              value.each do |name, parameter_data|
                 method.query_parameters << Raml::Parser::QueryParameter.new(self).parse(name, parameter_data)
               end
             else
               raise UnknownAttributeError.new "Unknown method key: #{key}"
             end
-          end if data
+          end if attributes
+        end
+
+        def apply_parents_traits
+          apply_traits(parent.trait_names) if !parent.trait_names.nil? && parent.trait_names.length
+        end
+
+        def apply_traits(names)
+          names.each do |name|
+            apply_trait(name)
+          end
+        end
+
+        def apply_trait(name)
+          unless traits[name].nil?
+            trait_data = prepare_attributes(traits[name])
+            parse_attributes(trait_data)
+          end
         end
 
     end

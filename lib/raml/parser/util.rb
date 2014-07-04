@@ -7,7 +7,7 @@ module Raml
         def prepare_attributes(data)
           hash = {}
           data.each do |key, value|
-            hash[underscore(key)] = parse_value(value)
+              hash[underscore(key)] = parse_value(value)
           end if data.respond_to?(:each)
           hash
         end

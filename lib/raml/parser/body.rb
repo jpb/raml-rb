@@ -6,21 +6,22 @@ module Raml
   class Parser
     class Body < Node
 
-      ATTRIBUTES = BASIC_ATTRIBUTES = %w[schema]
+      BASIC_ATTRIBUTES = %w[schema]
+
       attr_accessor :body
 
       def parse(type, data)
         @body = Raml::Body.new(type)
+        @data = prepare_attributes(data)
 
-        data = prepare_attributes(data)
-        parse_attributes(data)
+        parse_attributes
 
         body
       end
 
       private
 
-        def parse_attributes(data)
+        def parse_attributes
           data.each do |key, value|
             case key
             when *BASIC_ATTRIBUTES

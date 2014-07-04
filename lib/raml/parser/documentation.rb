@@ -6,22 +6,22 @@ module Raml
   class Parser
     class Documentation < Node
 
-      ATTRIBUTES = BASIC_ATTRIBUTES = %w[title content]
+      BASIC_ATTRIBUTES = %w[title content]
 
       attr_accessor :documentation
 
       def parse(data)
         @documentation = Raml::Documentation.new
+        @data = prepare_attributes(data)
 
-        data = prepare_attributes(data)
-        parse_attributes(data)
+        parse_attributes
 
         documentation
       end
 
       private
 
-        def parse_attributes(data)
+        def parse_attributes
           data.each do |key, value|
             case key
             when *BASIC_ATTRIBUTES
@@ -29,7 +29,7 @@ module Raml
             else
               raise UnknownAttributeError.new "Unknown documentation key: #{key}"
             end
-          end
+          end if data
         end
 
     end

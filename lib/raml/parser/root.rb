@@ -10,48 +10,50 @@ module Raml
       include Raml::Parser::Util
 
       BASIC_ATTRIBUTES = %w[title base_uri version]
-      ATTRIBUTES = BASIC_ATTRIBUTES + %w[traits documentation]
 
-      attr_accessor :root, :traits, :trait_names
+      attr_accessor :root, :traits, :data
 
       def initialize
         @traits = {}
-        @trait_names = []
       end
 
       def parse(data)
         @root = Raml::Root.new
-        parse_attributes(data)
+        @data = prepare_attributes(data)
+        parse_attributes
         root
       end
 
       private
 
-        def parse_attributes(data)
+        def parse_attributes
           data.each do |key, value|
             key = underscore(key)
             case key
             when *BASIC_ATTRIBUTES
-              root.send("#{key}=".to_sym, parse_value(value))
+              root.send("#{key}=".to_sym, value)
             when 'traits'
-              parse_traits(parse_value(value))
+              parse_traits(value)
             when 'documentation'
-              data = data.is_a?(Array) ? data : [data]
-              data.each do |values|
-                root.documentations << Raml::Parser::Documentation.new(self).parse(parse_value(value))
-              end
+              parse_documentation(value)
             when /^\//
-              root.resources << Raml::Parser::Resource.new(self).parse(root, key, parse_value(value))
+              root.resources << Raml::Parser::Resource.new(self).parse(root, key, value)
             else
               raise UnknownAttributeError.new "Unknown root key: #{key}"
             end
+          end if data
+        end
+
+        def parse_documentation(documentations)
+          documentations.each do |documentation_data|
+            root.documentations << Raml::Parser::Documentation.new(self).parse(documentation_data)
           end
         end
 
         def parse_traits(traits)
           traits.each do |trait|
-            trait.each do |name, data|
-              @traits[name] = data
+            trait.each do |name, trait_data|
+              @traits[name] = trait_data
             end
           end
         end

@@ -10,40 +10,34 @@ module Raml
       extend Forwardable
 
       METHODS = %w[get put post delete]
-      BASIC_ATTRIBUTES = %w[]
-      ATTRIBUTES = METHODS + BASIC_ATTRIBUTES + [/^\//]
 
-      attr_accessor :parent_node, :resource
+      attr_accessor :parent_node, :resource, :trait_names
       def_delegators :@parent_node, :resources
 
       def parse(parent_node, uri_partial, data)
         @parent_node = parent_node
         @resource = Raml::Resource.new(@parent_node, uri_partial)
-
-        data = prepare_attributes(data)
-        parse_attributes(data)
-
-        @resource
+        @data = prepare_attributes(data)
+        parse_attributes
+        resource
       end
 
       private
 
-        def parse_attributes(data)
+        def parse_attributes
           data.each do |key, value|
             key = underscore(key)
             case key
-            when *BASIC_ATTRIBUTES
-              resource.send("#{key}=".to_sym, parse_value(value))
             when /^\//
-              resources << Raml::Parser::Resource.new(self).parse(resource, key, parse_value(value))
+              resources << Raml::Parser::Resource.new(self).parse(resource, key, value)
             when *METHODS
-              resource.methods << Raml::Parser::Method.new(self).parse(key, parse_value(value))
+              resource.methods << Raml::Parser::Method.new(self).parse(key, value)
             when 'is'
               @trait_names = value
             else
               raise UnknownAttributeError.new "Unknown resource key: #{key}"
             end
-          end
+          end if data
         end
 
     end
