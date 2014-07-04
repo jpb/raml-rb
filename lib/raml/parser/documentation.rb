@@ -4,7 +4,7 @@ require 'raml/errors/unknown_attribute_error'
 
 module Raml
   class Parser
-    class Documentation
+    class Documentation < Node
 
       ATTRIBUTES = BASIC_ATTRIBUTES = %w[title content]
 
