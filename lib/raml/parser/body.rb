@@ -10,9 +10,9 @@ module Raml
 
       attr_accessor :body
 
-      def parse(type, attribute)
+      def parse(type, attributes)
         @body = Raml::Body.new(type)
-        @attribute = prepare_attributes(attribute)
+        @attributes = prepare_attributes(attributes)
 
         parse_attributes
 
@@ -22,14 +22,14 @@ module Raml
       private
 
         def parse_attributes
-          attribute.each do |key, value|
+          attributes.each do |key, value|
             case key
             when *BASIC_ATTRIBUTES
               body.send("#{key}=".to_sym, value)
             else
               raise UnknownAttributeError.new "Unknown body key: #{key}"
             end
-          end if attribute
+          end if attributes
         end
 
     end

@@ -11,15 +11,15 @@ module Raml
 
       BASIC_ATTRIBUTES = %w[title base_uri version]
 
-      attr_accessor :root, :traits, :resource_types, :attribute
+      attr_accessor :root, :traits, :resource_types, :attributes
 
       def initialize
         @traits = {}
       end
 
-      def parse(attribute)
+      def parse(attributes)
         @root = Raml::Root.new
-        @attribute = prepare_attributes(attribute)
+        @attributes = prepare_attributes(attributes)
         parse_attributes
         root
       end
@@ -27,13 +27,15 @@ module Raml
       private
 
         def parse_attributes
-          attribute.each do |key, value|
+          attributes.each do |key, value|
             key = underscore(key)
             case key
             when *BASIC_ATTRIBUTES
               root.send("#{key}=".to_sym, value)
             when 'traits'
               parse_traits(value)
+            when 'resource_types'
+              parse_resource_types(value)
             when 'documentation'
               parse_documentation(value)
             when /^\//
@@ -41,19 +43,27 @@ module Raml
             else
               raise UnknownAttributeError.new "Unknown root key: #{key}"
             end
-          end if attribute
+          end if attributes
         end
 
         def parse_documentation(documentations)
-          documentations.each do |documentation_attribute|
-            root.documentations << Raml::Parser::Documentation.new(self).parse(documentation_attribute)
+          documentations.each do |documentation_attributes|
+            root.documentations << Raml::Parser::Documentation.new(self).parse(documentation_attributes)
+          end
+        end
+
+        def parse_resource_types(resource_types)
+          resource_types.each do |type|
+            type.each do |name, type_attributes|
+              @resource_types[name] = type_attributes
+            end
           end
         end
 
         def parse_traits(traits)
           traits.each do |trait|
-            trait.each do |name, trait_attribute|
-              @traits[name] = trait_attribute
+            trait.each do |name, trait_attributes|
+              @traits[name] = trait_attributes
             end
           end
         end

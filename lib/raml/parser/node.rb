@@ -7,7 +7,7 @@ module Raml
       include Raml::Parser::Util
       extend Forwardable
 
-      attr_accessor :parent, :attribute
+      attr_accessor :parent, :attributes
       def_delegators :@parent, :traits
 
       def initialize(parent)
