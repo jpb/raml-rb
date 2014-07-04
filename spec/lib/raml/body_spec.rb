@@ -20,4 +20,5 @@ describe Raml::Body do
     subject { body.schema }
     it { should == 'schema' }
   end
+
 end
