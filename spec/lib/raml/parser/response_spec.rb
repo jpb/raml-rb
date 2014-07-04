@@ -1,8 +1,7 @@
 require 'raml/parser/response'
 
 describe Raml::Parser::Response do
-  let(:parent) { double() }
-  let(:instance) { Raml::Parser::Response.new(parent) }
+  let(:instance) { Raml::Parser::Response.new }
   let(:code) { 201 }
   let(:attribute) { { 'body' => { 'cats' => {} } } }
 

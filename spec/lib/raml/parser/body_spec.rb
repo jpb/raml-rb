@@ -1,8 +1,7 @@
 require 'raml/parser/body'
 
 describe Raml::Parser::Body do
-  let(:parent) { double() }
-  let(:instance) { Raml::Parser::Body.new(parent) }
+  let(:instance) { Raml::Parser::Body.new }
   let(:type) { 'application/json' }
   let(:attribute) { { 'schema' => 'dogs' } }
 

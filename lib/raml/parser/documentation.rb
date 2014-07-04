@@ -1,14 +1,14 @@
 require 'raml/documentation'
-require 'raml/parser/node'
 require 'raml/errors/unknown_attribute_error'
 
 module Raml
   class Parser
-    class Documentation < Node
+    class Documentation
+      include Raml::Parser::Util
 
       BASIC_ATTRIBUTES = %w[title content]
 
-      attr_accessor :documentation
+      attr_accessor :documentation, :attributes
 
       def parse(attributes)
         @documentation = Raml::Documentation.new

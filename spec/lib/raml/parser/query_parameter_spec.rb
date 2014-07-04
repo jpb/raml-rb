@@ -1,8 +1,7 @@
 require 'raml/parser/query_parameter'
 
 describe Raml::Parser::QueryParameter do
-  let(:parent) { double() }
-  let(:instance) { Raml::Parser::QueryParameter.new(parent) }
+  let(:instance) { Raml::Parser::QueryParameter.new }
   let(:type) { 'application/json' }
   let(:attribute) { { 'description' => 'dogs', 'type' => 'cats', 'example' => 'birds' } }
 

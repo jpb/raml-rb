@@ -1,14 +1,15 @@
 require 'raml/body'
-require 'raml/parser/node'
+require 'raml/parser/util'
 require 'raml/errors/unknown_attribute_error'
 
 module Raml
   class Parser
-    class Body < Node
+    class Body
+      include Raml::Parser::Util
 
       BASIC_ATTRIBUTES = %w[schema]
 
-      attr_accessor :body
+      attr_accessor :body, :attributes
 
       def parse(type, attributes)
         @body = Raml::Body.new(type)

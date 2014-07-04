@@ -1,12 +1,14 @@
 require 'raml/response'
+require 'raml/parser/util'
 require 'raml/parser/body'
 require 'raml/errors/unknown_attribute_error'
 
 module Raml
   class Parser
-    class Response < Node
+    class Response
+      include Raml::Parser::Util
 
-      attr_accessor :response
+      attr_accessor :response, :attributes
 
       def parse(code, attributes)
         @response = Raml::Response.new(code)
@@ -31,7 +33,7 @@ module Raml
 
         def parse_bodies(bodies)
           bodies.each do |type, body_attributes|
-            response.bodies << Raml::Parser::Body.new(self).parse(type, body_attributes)
+            response.bodies << Raml::Parser::Body.new.parse(type, body_attributes)
           end
         end
 

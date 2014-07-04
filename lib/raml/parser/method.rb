@@ -1,17 +1,24 @@
+require 'forwardable'
 require 'raml/method'
 require 'raml/parser/response'
 require 'raml/parser/query_parameter'
 require 'raml/parser/util'
-require 'raml/parser/node'
 require 'raml/errors/unknown_attribute_error'
 
 module Raml
   class Parser
-    class Method < Node
+    class Method
+      extend Forwardable
+      include Raml::Parser::Util
 
       BASIC_ATTRIBUTES = %w[description headers]
 
-      attr_accessor :method
+      attr_accessor :method, :parent, :attributes
+      def_delegators :@parent, :traits
+
+      def initialize(parent)
+        @parent = parent
+      end
 
       def parse(the_method, attributes)
         @method = Raml::Method.new(the_method)
@@ -33,17 +40,25 @@ module Raml
             when 'is'
               apply_traits(value)
             when 'responses'
-              value.each do |code, response_attributes|
-                method.responses << Raml::Parser::Response.new(self).parse(code, response_attributes)
-              end
+              parse_responses(value)
             when 'query_parameters'
-              value.each do |name, parameter_attributes|
-                method.query_parameters << Raml::Parser::QueryParameter.new(self).parse(name, parameter_attributes)
-              end
+              parse_query_parameters(value)
             else
               raise UnknownAttributeError.new "Unknown method key: #{key}"
             end
           end if attributes
+        end
+
+        def parse_responses(responses)
+          responses.each do |code, response_attributes|
+            method.responses << Raml::Parser::Response.new.parse(code, response_attributes)
+          end
+        end
+
+        def parse_query_parameters(query_parameters)
+          query_parameters.each do |name, parameter_attributes|
+            method.query_parameters << Raml::Parser::QueryParameter.new.parse(name, parameter_attributes)
+          end
         end
 
         def apply_parents_traits

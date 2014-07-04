@@ -1,19 +1,24 @@
 require 'forwardable'
 require 'raml/resource'
 require 'raml/parser/method'
-require 'raml/parser/node'
+require 'raml/parser/util'
 require 'raml/errors/unknown_attribute_error'
 
 module Raml
   class Parser
-    class Resource < Node
+    class Resource
       extend Forwardable
+      include Raml::Parser::Util
 
       METHODS = %w[get put post delete]
 
-      attr_accessor :parent_node, :resource, :trait_names
+      attr_accessor :parent_node, :resource, :trait_names, :attributes
       def_delegators :@parent_node, :resources
-      def_delegators :@parent, :resource_types
+      def_delegators :@parent, :traits, :resource_types
+
+      def initialize(parent)
+        @parent = parent
+      end
 
       def parse(parent_node, uri_partial, attributes)
         @parent_node = parent_node
