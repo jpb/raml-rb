@@ -1,3 +1,5 @@
+require 'raml/root'
+
 describe Raml::Root do
 
   describe '#resources' do
