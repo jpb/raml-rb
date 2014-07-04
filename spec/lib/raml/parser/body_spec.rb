@@ -1,7 +1,7 @@
 require 'raml/parser/body'
 
 describe Raml::Parser::Body do
-  let(:parent) { double(traits: { 'is_cat' => { 'schema' => 'cats' } }, trait_names: []) }
+  let(:parent) { double() }
   let(:instance) { Raml::Parser::Body.new(parent) }
   let(:type) { 'application/json' }
   let(:data) { { 'schema' => 'dogs' } }
@@ -11,11 +11,6 @@ describe Raml::Parser::Body do
 
     it { should be_kind_of Raml::Body }
     its(:schema) { should == 'dogs' }
-
-    context 'trait' do
-      let(:data) { { 'schema' => 'dogs', 'is' => [ 'is_cat' ] } }
-      its(:schema) { should == 'cats' }
-    end
   end
 
   describe '#body' do

@@ -14,7 +14,7 @@ describe Raml::Parser::Root do
     its('resources.count') { should == 2 }
     its('resources.first.methods.count') { should == 2 }
     its('resources.first.methods.first.responses.count') { should == 1 }
-    its('resources.first.methods.first.query_parameters.count') { should == 1 }
+    its('resources.first.methods.first.query_parameters.count') { should == 0 }
     its('documentation.count') { should == 0 }
 
     context 'trait-inherited attributes' do

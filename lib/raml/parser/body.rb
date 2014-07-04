@@ -11,10 +11,10 @@ module Raml
 
       def parse(type, data)
         @body = Raml::Body.new(type)
+
         data = prepare_attributes(data)
-        set_trait_names(data)
-        apply_parents_traits
         parse_attributes(data)
+
         body
       end
 
@@ -25,8 +25,6 @@ module Raml
             case key
             when *BASIC_ATTRIBUTES
               body.send("#{key}=".to_sym, value)
-            when 'is'
-              apply_traits(value)
             else
               raise UnknownAttributeError.new "Unknown body key: #{key}"
             end

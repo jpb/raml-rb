@@ -14,8 +14,6 @@ module Raml
       def parse(code, data)
         @response = Raml::Response.new(code)
         data = prepare_attributes(data)
-        set_trait_names(data)
-        apply_parents_traits
         parse_attributes(data)
         response
       end
@@ -28,8 +26,6 @@ module Raml
             case key
             when *BASIC_ATTRIBUTES
               response.send("#{key}=".to_sym, parse_value(value))
-            when 'is'
-              apply_traits(parse_value(value))
             when 'body'
               parse_value(value).each do |type, body_data|
                 response.bodies << Raml::Parser::Body.new(self).parse(type, body_data)

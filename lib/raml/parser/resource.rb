@@ -19,10 +19,10 @@ module Raml
       def parse(parent_node, uri_partial, data)
         @parent_node = parent_node
         @resource = Raml::Resource.new(@parent_node, uri_partial)
+
         data = prepare_attributes(data)
-        set_trait_names(data)
-        apply_parents_traits
         parse_attributes(data)
+
         @resource
       end
 
@@ -34,12 +34,12 @@ module Raml
             case key
             when *BASIC_ATTRIBUTES
               resource.send("#{key}=".to_sym, parse_value(value))
-            when 'is'
-              apply_traits(parse_value(value))
             when /^\//
               resources << Raml::Parser::Resource.new(self).parse(resource, key, parse_value(value))
             when *METHODS
               resource.methods << Raml::Parser::Method.new(self).parse(key, parse_value(value))
+            when 'is'
+              @trait_names = value
             else
               raise UnknownAttributeError.new "Unknown resource key: #{key}"
             end
