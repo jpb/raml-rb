@@ -10,19 +10,19 @@ module Raml
 
       attr_accessor :query_parameter
 
-      def parse(name, data)
+      def parse(name, attribute)
         @query_parameter = Raml::QueryParameter.new(name)
 
-        @data = prepare_attributes(data)
-        parse_attributes(data)
+        @attribute = prepare_attributes(attribute)
+        parse_attributes(attribute)
 
         query_parameter
       end
 
       private
 
-        def parse_attributes(data)
-          data.each do |key, value|
+        def parse_attributes(attribute)
+          attribute.each do |key, value|
             key = underscore(key)
             case key
             when *BASIC_ATTRIBUTES
@@ -30,7 +30,7 @@ module Raml
             else
               raise UnknownAttributeError.new "Unknown query paramter key: #{key}"
             end
-          end if data
+          end if attribute
         end
 
     end

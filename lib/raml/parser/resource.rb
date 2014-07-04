@@ -14,10 +14,10 @@ module Raml
       attr_accessor :parent_node, :resource, :trait_names
       def_delegators :@parent_node, :resources
 
-      def parse(parent_node, uri_partial, data)
+      def parse(parent_node, uri_partial, attribute)
         @parent_node = parent_node
         @resource = Raml::Resource.new(@parent_node, uri_partial)
-        @data = prepare_attributes(data)
+        @attribute = prepare_attributes(attribute)
         parse_attributes
         resource
       end
@@ -25,7 +25,7 @@ module Raml
       private
 
         def parse_attributes
-          data.each do |key, value|
+          attribute.each do |key, value|
             key = underscore(key)
             case key
             when /^\//
@@ -37,7 +37,7 @@ module Raml
             else
               raise UnknownAttributeError.new "Unknown resource key: #{key}"
             end
-          end if data
+          end if attribute
         end
 
     end

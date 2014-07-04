@@ -13,9 +13,9 @@ module Raml
 
       attr_accessor :method
 
-      def parse(the_method, data)
+      def parse(the_method, attribute)
         @method = Raml::Method.new(the_method)
-        @data = prepare_attributes(data)
+        @attribute = prepare_attributes(attribute)
 
         apply_parents_traits
         parse_attributes
@@ -25,7 +25,7 @@ module Raml
 
       private
 
-        def parse_attributes(attributes = @data)
+        def parse_attributes(attributes = @attribute)
           attributes.each do |key, value|
             case key
             when *BASIC_ATTRIBUTES
@@ -33,12 +33,12 @@ module Raml
             when 'is'
               apply_traits(value)
             when 'responses'
-              value.each do |code, response_data|
-                method.responses << Raml::Parser::Response.new(self).parse(code, response_data)
+              value.each do |code, response_attribute|
+                method.responses << Raml::Parser::Response.new(self).parse(code, response_attribute)
               end
             when 'query_parameters'
-              value.each do |name, parameter_data|
-                method.query_parameters << Raml::Parser::QueryParameter.new(self).parse(name, parameter_data)
+              value.each do |name, parameter_attribute|
+                method.query_parameters << Raml::Parser::QueryParameter.new(self).parse(name, parameter_attribute)
               end
             else
               raise UnknownAttributeError.new "Unknown method key: #{key}"
@@ -58,8 +58,8 @@ module Raml
 
         def apply_trait(name)
           unless traits[name].nil?
-            trait_data = prepare_attributes(traits[name])
-            parse_attributes(trait_data)
+            trait_attribute = prepare_attributes(traits[name])
+            parse_attributes(trait_attribute)
           end
         end
 

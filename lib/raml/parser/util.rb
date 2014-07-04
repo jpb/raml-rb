@@ -4,11 +4,11 @@ module Raml
 
       private
 
-        def prepare_attributes(data)
+        def prepare_attributes(attributes)
           hash = {}
-          data.each do |key, value|
-              hash[underscore(key)] = parse_value(value)
-          end if data.respond_to?(:each)
+          attributes.each do |key, value|
+            hash[underscore(key)] = parse_value(value)
+          end if attributes.respond_to?(:each)
           hash
         end
 

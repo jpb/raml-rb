@@ -10,9 +10,9 @@ module Raml
 
       attr_accessor :documentation
 
-      def parse(data)
+      def parse(attribute)
         @documentation = Raml::Documentation.new
-        @data = prepare_attributes(data)
+        @attribute = prepare_attributes(attribute)
 
         parse_attributes
 
@@ -22,14 +22,14 @@ module Raml
       private
 
         def parse_attributes
-          data.each do |key, value|
+          attribute.each do |key, value|
             case key
             when *BASIC_ATTRIBUTES
               documentation.send("#{key}=".to_sym, value)
             else
               raise UnknownAttributeError.new "Unknown documentation key: #{key}"
             end
-          end if data
+          end if attribute
         end
 
     end

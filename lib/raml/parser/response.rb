@@ -8,9 +8,9 @@ module Raml
 
       attr_accessor :response
 
-      def parse(code, data)
+      def parse(code, attribute)
         @response = Raml::Response.new(code)
-        @data = prepare_attributes(data)
+        @attribute = prepare_attributes(attribute)
         parse_attributes
         response
       end
@@ -18,7 +18,7 @@ module Raml
       private
 
         def parse_attributes
-          data.each do |key, value|
+          attribute.each do |key, value|
             key = underscore(key)
             case key
             when 'body'
@@ -26,12 +26,12 @@ module Raml
             else
               raise UnknownAttributeError.new "Unknown response key: #{key}"
             end
-          end if data
+          end if attribute
         end
 
         def parse_bodies(bodies)
-          bodies.each do |type, body_data|
-            response.bodies << Raml::Parser::Body.new(self).parse(type, body_data)
+          bodies.each do |type, body_attribute|
+            response.bodies << Raml::Parser::Body.new(self).parse(type, body_attribute)
           end
         end
 
