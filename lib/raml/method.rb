@@ -1,10 +1,10 @@
 module Raml
   class Method
 
-    attr_accessor :action, :description, :headers, :responses, :query_parameters
+    attr_accessor :method, :description, :headers, :responses, :query_parameters
 
-    def initialize(action)
-      @action = action
+    def initialize(method)
+      @method = method
       @responses = []
       @query_parameters = []
     end

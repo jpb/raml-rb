@@ -14,8 +14,8 @@ module Raml
 
       attr_accessor :method
 
-      def parse(action, data)
-        @method = Raml::Method.new(action)
+      def parse(the_method, data)
+        @method = Raml::Method.new(the_method)
         data = prepare_attributes(data)
         set_trait_names(data)
         apply_parents_traits
