@@ -2,7 +2,7 @@ require 'raml/parser/resource'
 
 describe Raml::Parser::Resource do
 
-  let(:parent) { double() }
+  let(:parent) { double(resource_types: { 'cats' => { 'post' => {} } }) }
   let(:resources) { double('<<'.to_sym => nil) }
   let(:parent_node) { double(resources: resources) }
   let(:instance) { Raml::Parser::Resource.new(parent) }
@@ -28,6 +28,14 @@ describe Raml::Parser::Resource do
           expect_any_instance_of(Raml::Parser::Method).to receive(:parse).with(method, 'method attributess').once
           instance.parse(parent_node, uri_partial, attributes)
         end
+      end
+    end
+
+    context 'resource type' do
+      let(:attributes) { { 'type' => 'cats' } }
+      it 'should call through to method parser' do
+        expect_any_instance_of(Raml::Parser::Method).to receive(:parse).with('post', {}).once
+        instance.parse(parent_node, uri_partial, attributes)
       end
     end
   end

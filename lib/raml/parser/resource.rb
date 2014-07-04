@@ -13,6 +13,7 @@ module Raml
 
       attr_accessor :parent_node, :resource, :trait_names
       def_delegators :@parent_node, :resources
+      def_delegators :@parent, :resource_types
 
       def parse(parent_node, uri_partial, attributes)
         @parent_node = parent_node
