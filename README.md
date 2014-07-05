@@ -2,6 +2,12 @@
 
 A RAML parser, implemented in Ruby.
 
+## Installation
+
+```
+gem install raml-rb
+```
+
 ## Usage
 
 ```Ruby
