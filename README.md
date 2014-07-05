@@ -13,7 +13,8 @@ raml = Rank::Parser.parse_file('path/to/file.raml')
 
 0. Parameters for Resource Types and Traits.
 0. Ensure all attributes are supported.
-0. Add documentation generator.
+0. Documentation generator.
+0. RAML file generator.
 
 ## Author
 
