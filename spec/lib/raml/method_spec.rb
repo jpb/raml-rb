@@ -1,0 +1,17 @@
+require 'raml/method'
+
+describe Raml::Method do
+
+  describe '.new' do
+    subject { Raml::Method.new('delete') }
+    its(:method) { should == 'delete' }
+  end
+
+  describe '#title' do
+    let(:documentation) { Raml::Documentation.new }
+    before { documentation.title = 'the title' }
+    subject { documentation.title }
+    it { should == 'the title' }
+  end
+
+end
