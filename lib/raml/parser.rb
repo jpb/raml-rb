@@ -1,5 +1,4 @@
 require 'yaml'
-require 'raml/errors/unknown_attribute_error'
 require 'raml/parser/root'
 require 'raml/parser/resource'
 require 'raml/parser/method'
