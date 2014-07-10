@@ -1,9 +1,9 @@
 module Raml
   class Body
-    attr_accessor :type, :schema
+    attr_accessor :content_type, :schema
 
-    def initialize(type)
-      @type = type
+    def initialize(content_type)
+      @content_type = content_type
     end
 
   end

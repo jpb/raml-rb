@@ -14,4 +14,7 @@ describe Raml::Method do
     it { should == 'the title' }
   end
 
+  describe '#response_code' do
+  end
+
 end

@@ -7,5 +7,13 @@ module Raml
       @bodies = []
     end
 
+    def content_types
+      [].tap do |types|
+        bodies.each do |body|
+          types << body.content_type
+        end
+      end.uniq
+    end
+
   end
 end

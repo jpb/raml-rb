@@ -15,6 +15,7 @@ module Raml
 
       def initialize
         @traits = {}
+        @resource_types = {}
       end
 
       def parse(attributes)

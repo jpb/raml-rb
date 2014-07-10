@@ -11,5 +11,9 @@ module Raml
       base_uri.sub('{version}', version.to_s)
     end
 
+    def path
+      ''
+    end
+
   end
 end

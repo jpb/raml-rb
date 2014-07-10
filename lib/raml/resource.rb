@@ -8,6 +8,10 @@ module Raml
       @methods = []
     end
 
+    def path
+      File.join(parent.path, uri_partial)
+    end
+
     def uri
       File.join(parent.uri, uri_partial)
     end

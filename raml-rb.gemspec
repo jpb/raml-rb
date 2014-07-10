@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = Raml::VERSION
   spec.authors       = ['James Brennan']
   spec.email         = ['james@jamesbrennan.ca']
-  spec.summary       = %q{A RAML parser implemented in Ruby}
+  spec.summary       = 'A RAML parser implemented in Ruby'
   spec.homepage      = 'https://github.com/jpb/raml-rb'
   spec.license       = 'MIT'
 
@@ -16,6 +16,8 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
+
+  spec.add_dependency 'deep_merge', '~> 1.0'
 
   spec.add_development_dependency 'bundler',    '~> 1.6'
   spec.add_development_dependency 'rake',       '~>10.3'
