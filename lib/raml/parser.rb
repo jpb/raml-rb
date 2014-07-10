@@ -9,13 +9,26 @@ require 'raml/parser/query_parameter'
 module Raml
   class Parser
 
+    def initialize
+      Psych.add_domain_type 'include', 'include' do |_, value|
+        File.read(value)
+      end
+    end
+
     def parse(yaml)
       raml = YAML.load(yaml)
       Raml::Parser::Root.new.parse(raml)
     end
 
     def parse_file(path)
-      parse File.read(path)
+      # Change directories so that relative file !includes work properly
+      wd = Dir.pwd
+      Dir.chdir File.dirname(path)
+
+      raml = parse File.read(File.basename(path))
+
+      Dir.chdir wd
+      raml
     end
 
     def self.parse(yaml)
