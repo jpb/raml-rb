@@ -1,4 +1,5 @@
 require 'forwardable'
+require 'deep_merge'
 require 'raml/method'
 require 'raml/parser/response'
 require 'raml/parser/query_parameter'
@@ -25,6 +26,7 @@ module Raml
         @attributes = prepare_attributes(attributes)
 
         apply_parents_traits
+        apply_traits
         parse_attributes
 
         method
@@ -32,13 +34,11 @@ module Raml
 
       private
 
-        def parse_attributes(attributes = @attributes)
+        def parse_attributes
           attributes.each do |key, value|
             case key
             when *BASIC_ATTRIBUTES
               method.send("#{key}=".to_sym, value)
-            when 'is'
-              apply_traits(value)
             when 'responses'
               parse_responses(value)
             when 'query_parameters'
@@ -62,19 +62,23 @@ module Raml
         end
 
         def apply_parents_traits
-          apply_traits(parent.trait_names) if !parent.trait_names.nil? && parent.trait_names.length
+          parent.trait_names.each do |name|
+            apply_trait(name)
+          end if parent.trait_names.respond_to?(:each)
         end
 
-        def apply_traits(names)
-          names.each do |name|
+        def apply_traits
+          attributes['is'].each do |name|
             apply_trait(name)
-          end
+          end if attributes['is'].respond_to?(:each)
+
+          attributes.delete('is')
         end
 
         def apply_trait(name)
           unless traits[name].nil?
             trait_attributes = prepare_attributes(traits[name])
-            parse_attributes(trait_attributes)
+            @attributes = trait_attributes.deep_merge(attributes)
           end
         end
 
