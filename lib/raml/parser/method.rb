@@ -1,5 +1,5 @@
 require 'forwardable'
-require 'deep_merge'
+require 'core_ext/hash'
 require 'raml/method'
 require 'raml/parser/response'
 require 'raml/parser/query_parameter'

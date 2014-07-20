@@ -1,5 +1,5 @@
 require 'forwardable'
-require 'deep_merge'
+require 'core_ext/hash'
 require 'raml/resource'
 require 'raml/parser/method'
 require 'raml/parser/util'
@@ -53,7 +53,7 @@ module Raml
           if name and !resource_types[name].nil?
             resource_attributes = prepare_attributes(resource_types[name])
             @attributes.delete('type')
-            @attributes = @attributes.deep_merge(resource_attributes)
+            @attributes = resource_attributes.deep_merge(attributes)
           end
         end
 
