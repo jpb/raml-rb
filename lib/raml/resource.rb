@@ -1,11 +1,12 @@
 module Raml
   class Resource
-    attr_accessor :parent, :methods, :uri_partial
+    attr_accessor :parent, :methods, :uri_partial, :resources
 
     def initialize(parent, uri_partial)
       @parent = parent
       @uri_partial = uri_partial
       @methods = []
+      @resources = []
     end
 
     def path

@@ -14,7 +14,6 @@ module Raml
       METHODS = %w[get put post delete]
 
       attr_accessor :parent_node, :resource, :trait_names, :attributes
-      def_delegators :@parent_node, :resources
       def_delegators :@parent, :traits, :resource_types
 
       def initialize(parent)
@@ -37,7 +36,7 @@ module Raml
             key = underscore(key)
             case key
             when /^\//
-              resources << Raml::Parser::Resource.new(self).parse(resource, key, value)
+              resource.resources << Raml::Parser::Resource.new(self).parse(resource, key, value)
             when *METHODS
               resource.methods << Raml::Parser::Method.new(self).parse(key, value)
             when 'is'
