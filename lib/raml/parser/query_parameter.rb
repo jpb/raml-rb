@@ -7,7 +7,7 @@ module Raml
     class QueryParameter
       include Raml::Parser::Util
 
-      BASIC_ATTRIBUTES = %w[description type example]
+      BASIC_ATTRIBUTES = %w[description type example required]
 
       attr_accessor :query_parameter, :attributes
 
