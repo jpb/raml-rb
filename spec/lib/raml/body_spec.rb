@@ -21,4 +21,11 @@ describe Raml::Body do
     it { should == 'schema' }
   end
 
+  describe '#example' do
+    let(:body) { Raml::Body.new('the content_type') }
+    before { body.example = 'example' }
+    subject { body.example }
+    it { should == 'example' }
+  end
+
 end

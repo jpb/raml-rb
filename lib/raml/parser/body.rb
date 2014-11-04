@@ -27,6 +27,8 @@ module Raml
             case key
             when *BASIC_ATTRIBUTES
               body.send("#{key}=".to_sym, value)
+            when 'example'
+              body.example = value.is_a?(String) ? value.strip : value
             else
               raise UnknownAttributeError.new "Unknown body key: #{key}"
             end
