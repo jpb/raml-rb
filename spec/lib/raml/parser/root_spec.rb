@@ -11,21 +11,21 @@ describe Raml::Parser::Root do
     its(:base_uri) { should == 'http://example.api.com/{version}' }
     its(:uri) { should == 'http://example.api.com/v1' }
     its(:version) { should == 'v1' }
-    its('resources.count') { should == 2 }
+    its('resources.count') { should == 1 }
     its('resources.first.methods.count') { should == 2 }
-    its('resources.first.methods.first.responses.count') { should == 1 }
-    its('resources.first.methods.first.query_parameters.count') { should == 0 }
+    its('resources.first.methods.first.responses.count') { should == 0 }
+    its('resources.first.methods.first.query_parameters.count') { should == 2 }
     its('documentation.count') { should == 0 }
 
     context 'trait-inherited attributes' do
-      subject { Raml::Parser::Root.new.parse(raml).resources.fetch(1).methods.first.query_parameters.first }
+      subject { Raml::Parser::Root.new.parse(raml).resources.first.methods.first.query_parameters.first }
       its(:name) { should == 'pages' }
       its(:description) { should == 'The number of pages to return' }
       its(:type) { should == 'number' }
     end
 
     context 'non trait-inherited attributes' do
-      subject { Raml::Parser::Root.new.parse(raml).resources.fetch(1).methods.first.query_parameters.last }
+      subject { Raml::Parser::Root.new.parse(raml).resources.first.methods.first.query_parameters.last }
       its(:name) { should == 'genre' }
       its(:description) { should == 'filter the songs by genre' }
       its(:type) { should == nil }

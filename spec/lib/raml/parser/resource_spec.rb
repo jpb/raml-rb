@@ -4,6 +4,7 @@ describe Raml::Parser::Resource do
 
   let(:parent) { double(resource_types: { 'cats' => { 'post' => {} } }) }
   let(:resources) { double('<<'.to_sym => nil) }
+  let(:resource) { double('<<'.to_sym => nil, resources: resources) }
   let(:parent_node) { double(resources: resources) }
   let(:instance) { Raml::Parser::Resource.new(parent) }
   let(:uri_partial) { '/cats' }
@@ -14,10 +15,13 @@ describe Raml::Parser::Resource do
     it { should be_kind_of Raml::Resource }
 
     context 'resource' do
-      before { subject }
+      before do
+        allow(instance).to receive(:resource).and_return(resource)
+        subject
+      end
       let(:attributes) { { '/bar' => {} } }
       it 'should create a method' do
-        resources.should have_received('<<').with(kind_of(Raml::Resource))
+        resource.resources.should have_received('<<').with(kind_of(Raml::Resource))
       end
     end
 
