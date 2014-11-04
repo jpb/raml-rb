@@ -17,7 +17,7 @@ describe Raml::Parser::Root do
     its('resources.first.methods.first.query_parameters.count') { should == 2 }
     its('documentation.count') { should == 0 }
     its('resources.first.resources.first.methods.first.responses.first.bodies.first.example') do
-      should == '{"artist":"Pink Floyd", "title":"Wish You Were Here"}'
+      should include '{"artist":"Pink Floyd", "title":"Wish You Were Here"}'
     end
 
     context 'trait-inherited attributes' do
