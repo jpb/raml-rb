@@ -1,6 +1,6 @@
 module Raml
   class Response
-    attr_accessor :code, :bodies
+    attr_accessor :code, :bodies, :description
 
     def initialize(code)
       @code = code

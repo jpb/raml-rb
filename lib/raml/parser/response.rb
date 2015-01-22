@@ -23,6 +23,8 @@ module Raml
           attributes.each do |key, value|
             key = underscore(key)
             case key
+            when 'description'
+              response.send("#{key}=".to_sym, value)
             when 'body'
               parse_bodies(value)
             else
