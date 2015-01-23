@@ -25,6 +25,16 @@ describe Raml::Parser::Resource do
       end
     end
 
+
+    { 'display_name' => 'Catgeory', 'description' => 'resource description' }.each do |key, value|
+      context "attribute: #{key}" do
+        let(:attributes) { { key => value } }
+        it 'should pass through display_name attribute' do
+          subject.send(key.to_sym).should == value
+        end
+      end
+    end
+
     %w[get put post delete].each do |method|
       context method do
         let(:attributes) { { method => 'method attributess' } }
