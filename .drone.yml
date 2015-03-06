@@ -1,4 +1,4 @@
-image: radrydzewski/ruby:2.0.0
+image: ruby:2
 git:
   path: github.com/jpb/raml-rb
 script:
