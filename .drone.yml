@@ -1,0 +1,6 @@
+image: radrydzewski/ruby:2.0.0
+git:
+  path: github.com/jpb/raml-rb
+script:
+  - bundle install
+  - bundle exec rspec
