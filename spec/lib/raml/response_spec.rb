@@ -12,14 +12,14 @@ describe Raml::Response do
     let(:response) { Raml::Response.new(201) }
     before { response.code = 'the code' }
     subject { response.code }
-    it { should == 'the code' }
+    it { is_expected.to eq('the code') }
   end
 
   describe '#bodies' do
     let(:response) { Raml::Response.new(201) }
     before { response.bodies = 'the bodies' }
     subject { response.bodies }
-    it { should == 'the bodies' }
+    it { is_expected.to eq('the bodies') }
   end
 
 end

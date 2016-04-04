@@ -12,7 +12,7 @@ describe Raml::Parser::Resource do
 
   describe '#parse' do
     subject { instance.parse(parent_node, uri_partial, attributes) }
-    it { should be_kind_of Raml::Resource }
+    it { is_expected.to be_kind_of Raml::Resource }
 
     context 'resource' do
       before do
@@ -21,7 +21,7 @@ describe Raml::Parser::Resource do
       end
       let(:attributes) { { '/bar' => {} } }
       it 'should create a method' do
-        resource.resources.should have_received('<<').with(kind_of(Raml::Resource))
+        expect(resource.resources).to have_received('<<').with(kind_of(Raml::Resource))
       end
     end
 
@@ -47,7 +47,7 @@ describe Raml::Parser::Resource do
   describe '#resource' do
     before { instance.parse(parent_node, uri_partial, attributes) }
     subject { instance.resource }
-    it { should be_kind_of Raml::Resource }
+    it { is_expected.to be_kind_of Raml::Resource }
   end
 
 end
