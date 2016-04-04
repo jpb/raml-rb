@@ -1,6 +1,6 @@
 # raml-rb
 
-[![Build Status](https://travis-ci.org/danascheider/raml-rb.svg?branch=master)](https://travis-ci.org/jrb/raml-rb)
+[![Build Status](https://travis-ci.org/jpb/raml-rb.svg?branch=master)](https://travis-ci.org/jrb/raml-rb)
 
 A RAML parser, implemented in Ruby.
 
