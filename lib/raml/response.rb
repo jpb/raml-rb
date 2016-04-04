@@ -3,16 +3,12 @@ module Raml
     attr_accessor :code, :bodies
 
     def initialize(code)
-      @code = code
+      @code   = code
       @bodies = []
     end
 
     def content_types
-      [].tap do |types|
-        bodies.each do |body|
-          types << body.content_type
-        end
-      end.uniq
+      bodies.map {|body| body.content_type }.uniq
     end
 
   end
