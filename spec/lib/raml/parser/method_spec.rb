@@ -3,7 +3,7 @@ require 'raml/parser/method'
 describe Raml::Parser::Method do
 
   describe '#parse' do
-    let(:attributes) { { 'description' => 'The description', 'headers' => [{ 'key' => 'value' }], 'responses' => ['cats'], 'query_parameters' => ['dogs'] } }
+    let(:attributes) { { 'description' => 'The description', 'headers' => [{ 'key' => 'value' }], 'responses' => ['cats'], 'query_parameters' => ['dogs'], 'body' => { 'application/json' => { 'example' => '{"cats": "dogs"}'} } } }
     let(:parent) { double(traits: { 'cats' => { 'description' => 'Trait description', 'headers' => { 'trait_key' => 'trait_value' } } }, trait_names: nil) }
     before do
       allow_any_instance_of(Raml::Parser::Response).to receive(:parse).and_return('cats')
@@ -17,6 +17,7 @@ describe Raml::Parser::Method do
     its(:headers) { should == [ { 'key' => 'value' } ] }
     its(:responses) { should == ['cats'] }
     its(:query_parameters) { should == ['dogs'] }
+    its(:'bodies.first.example') { should == '{"cats": "dogs"}' }
 
     context 'with trait' do
       let(:attributes) { { 'is' => [ 'cats' ], 'responses' => ['cats'], 'query_parameters' => ['dogs'] } }
