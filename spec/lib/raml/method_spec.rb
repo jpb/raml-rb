@@ -11,7 +11,7 @@ describe Raml::Method do
     let(:documentation) { Raml::Documentation.new }
     before { documentation.title = 'the title' }
     subject { documentation.title }
-    it { should == 'the title' }
+    it { is_expected.to eq('the title') }
   end
 
   describe '#response_code' do

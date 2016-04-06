@@ -7,7 +7,7 @@ describe Raml::Parser::Documentation do
     let(:trait_names) { nil }
     subject { Raml::Parser::Documentation.new.parse(attribute) }
 
-    it { should be_kind_of Raml::Documentation }
+    it { is_expected.to be_kind_of Raml::Documentation }
     its(:title) { should == 'The title' }
     its(:content) { should == 'The content' }
   end

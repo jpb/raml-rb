@@ -6,12 +6,12 @@ describe Raml::Parser::Method do
     let(:attributes) { { 'description' => 'The description', 'headers' => [{ 'key' => 'value' }], 'responses' => ['cats'], 'query_parameters' => ['dogs'] } }
     let(:parent) { double(traits: { 'cats' => { 'description' => 'Trait description', 'headers' => { 'trait_key' => 'trait_value' } } }, trait_names: nil) }
     before do
-      Raml::Parser::Response.any_instance.stub(:parse).and_return('cats')
-      Raml::Parser::QueryParameter.any_instance.stub(:parse).and_return('dogs')
+      allow_any_instance_of(Raml::Parser::Response).to receive(:parse).and_return('cats')
+      allow_any_instance_of(Raml::Parser::QueryParameter).to receive(:parse).and_return('dogs')
     end
     subject { Raml::Parser::Method.new(parent).parse('get', attributes) }
 
-    it { should be_kind_of Raml::Method }
+    it { is_expected.to be_kind_of Raml::Method }
     its(:method) { should == 'get' }
     its(:description) { should == 'The description' }
     its(:headers) { should == [ { 'key' => 'value' } ] }

@@ -9,10 +9,10 @@ describe Raml::Parser::Response do
     subject { instance.parse(code, attribute) }
 
     before do
-      Raml::Parser::Body.any_instance.stub(:parse)
+      allow_any_instance_of(Raml::Parser::Body).to receive(:parse)
     end
 
-    it { should be_kind_of Raml::Response }
+    it { is_expected.to be_kind_of Raml::Response }
     its(:code) { should == 201 }
     it 'should call through to body' do
       expect_any_instance_of(Raml::Parser::Body).to receive(:parse).with('cats', {}).once
@@ -23,7 +23,7 @@ describe Raml::Parser::Response do
   describe '#response' do
     before { instance.parse(code, attribute) }
     subject { instance.response }
-    it { should be_kind_of Raml::Response }
+    it { is_expected.to be_kind_of Raml::Response }
   end
 
 end

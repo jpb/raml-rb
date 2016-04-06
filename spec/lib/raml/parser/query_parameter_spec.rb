@@ -8,7 +8,7 @@ describe Raml::Parser::QueryParameter do
   describe '#parse' do
     subject { instance.parse(type, attribute) }
 
-    it { should be_kind_of Raml::QueryParameter }
+    it { is_expected.to be_kind_of Raml::QueryParameter }
     its(:description) { should == 'dogs' }
     its(:type) { should == 'cats' }
     its(:example) { should == 'birds' }
@@ -17,7 +17,7 @@ describe Raml::Parser::QueryParameter do
   describe '#query_parameter' do
     before { instance.parse(type, attribute) }
     subject { instance.query_parameter }
-    it { should be_kind_of Raml::QueryParameter }
+    it { is_expected.to be_kind_of Raml::QueryParameter }
   end
 
 end

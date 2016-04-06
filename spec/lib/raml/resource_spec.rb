@@ -14,20 +14,20 @@ describe Raml::Resource do
     let(:parent) { double(uri: 'http://www.example.com') }
     let(:uri_partial) { '/cats' }
     subject { Raml::Resource.new(parent, uri_partial).uri }
-    it { should == 'http://www.example.com/cats' }
+    it { is_expected.to eq('http://www.example.com/cats') }
 
     context 'partial no slash' do
       let(:uri_partial) { 'cats' }
-      it { should == 'http://www.example.com/cats' }
+      it { is_expected.to eq('http://www.example.com/cats') }
     end
 
     context 'base trailing slash' do
       let(:parent) { double(uri: 'http://www.example.com') }
-      it { should == 'http://www.example.com/cats' }
+      it { is_expected.to eq('http://www.example.com/cats') }
 
       context 'partial no slash' do
         let(:uri_partial) { 'cats' }
-        it { should == 'http://www.example.com/cats' }
+        it { is_expected.to eq('http://www.example.com/cats') }
       end
     end
   end
