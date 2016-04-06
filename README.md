@@ -2,6 +2,8 @@
 
 A RAML parser, implemented in Ruby.
 
+[![Code Climate](https://codeclimate.com/github/jpb/raml-rb/badges/gpa.svg)](https://codeclimate.com/github/jpb/raml-rb)
+
 ## Installation
 
 ```
