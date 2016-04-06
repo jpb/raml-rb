@@ -3,6 +3,7 @@ require 'core_ext/hash'
 require 'raml/method'
 require 'raml/parser/response'
 require 'raml/parser/query_parameter'
+require 'raml/parser/body'
 require 'raml/parser/util'
 require 'raml/errors/unknown_attribute_error'
 
@@ -43,6 +44,8 @@ module Raml
               parse_responses(value)
             when 'query_parameters'
               parse_query_parameters(value)
+            when 'body'
+              parse_bodies(value)
             else
               raise UnknownAttributeError.new "Unknown method key: #{key}"
             end
@@ -58,6 +61,12 @@ module Raml
         def parse_query_parameters(query_parameters)
           query_parameters.each do |name, parameter_attributes|
             method.query_parameters << Raml::Parser::QueryParameter.new.parse(name, parameter_attributes)
+          end
+        end
+
+        def parse_bodies(bodies)
+          bodies.each do |type, body_attributes|
+            method.bodies << Raml::Parser::Body.new.parse(type, body_attributes)
           end
         end
 
