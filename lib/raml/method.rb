@@ -10,19 +10,11 @@ module Raml
     end
 
     def response_codes
-      [].tap do |codes|
-        responses.each do |response|
-          codes << response.code
-        end
-      end
+      responses.map {|responses| response.code }
     end
 
     def content_types
-      [].tap do |types|
-        responses.each do |response|
-          types << response.content_types
-        end
-      end.flatten.uniq
+      responses.map {|response| response.content_type }.flatten.uniq
     end
 
   end

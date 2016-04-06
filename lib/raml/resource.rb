@@ -3,10 +3,10 @@ module Raml
     attr_accessor :parent, :methods, :uri_partial, :resources
 
     def initialize(parent, uri_partial)
-      @parent = parent
+      @parent      = parent
       @uri_partial = uri_partial
-      @methods = []
-      @resources = []
+      @methods     = []
+      @resources   = []
     end
 
     def path
