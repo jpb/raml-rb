@@ -1,4 +1,7 @@
 require 'rspec/its'
+require 'coveralls'
+
+Coveralls.wear!
 
 RSpec.configure do |config|
 
