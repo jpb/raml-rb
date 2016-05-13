@@ -1,7 +1,11 @@
 #%RAML 0.8
 
 title: World Music API
-baseUri: http://example.api.com/{version}
+baseUri: http://{environment}.api.com/{version}
+baseUriParameters:
+  environment:
+    description: The deployed environment
+    type: String
 version: v1
 documentation:
   - title: RAML Baml
