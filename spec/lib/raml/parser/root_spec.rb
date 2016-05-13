@@ -11,6 +11,9 @@ describe Raml::Parser::Root do
     its(:base_uri) { should == 'http://{environment}.api.com/{version}' }
     its(:uri) { should == 'http://{environment}.api.com/v1' }
     its(:version) { should == 'v1' }
+    its(:base_uri_parameters) do
+      should == {"environment" => { "description"=>"The deployed environment", "type"=>"String" }}
+    end
     its('resources.count') { should == 1 }
     its('resources.first.methods.count') { should == 2 }
     its('resources.first.methods.first.responses.count') { should == 0 }
