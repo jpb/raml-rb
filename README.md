@@ -1,6 +1,6 @@
 # raml-rb
 
-[![Build Status](https://travis-ci.org/jpb/raml-rb.svg?branch=master)](https://travis-ci.org/jpb/raml-rb) [![Coverage Status](https://coveralls.io/repos/github/jpb/raml-rb/badge.svg?branch=master)](https://coveralls.io/github/jpb/raml-rb?branch=master) [![Code Climate](https://codeclimate.com/github/jpb/raml-rb/badges/gpa.svg)](https://codeclimate.com/github/jpb/raml-rb)
+[![Gem Version](https://badge.fury.io/rb/raml-rb.svg)](https://badge.fury.io/rb/raml-rb) [![Build Status](https://travis-ci.org/jpb/raml-rb.svg?branch=master)](https://travis-ci.org/jpb/raml-rb) [![Coverage Status](https://coveralls.io/repos/github/jpb/raml-rb/badge.svg?branch=master)](https://coveralls.io/github/jpb/raml-rb?branch=master) [![Code Climate](https://codeclimate.com/github/jpb/raml-rb/badges/gpa.svg)](https://codeclimate.com/github/jpb/raml-rb)
 
 A RAML parser, implemented in Ruby.
 
