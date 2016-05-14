@@ -33,4 +33,10 @@ describe Raml::Root do
     it { is_expected.to eq('1.0') }
   end
 
+  describe '#base_uri_parameters' do
+    let(:root) { Raml::Root.new }
+    before { root.base_uri_parameters = '' }
+    subject { root.base_uri_parameters }
+    it { is_expected.to eq('') }
+  end
 end

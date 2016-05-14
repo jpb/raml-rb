@@ -9,7 +9,7 @@ module Raml
     class Root
       include Raml::Parser::Util
 
-      BASIC_ATTRIBUTES = %w[title base_uri version]
+      BASIC_ATTRIBUTES = %w[title base_uri version base_uri_parameters]
 
       attr_accessor :root, :traits, :resource_types, :attributes
 
