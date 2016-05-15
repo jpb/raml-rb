@@ -11,7 +11,14 @@ module Raml
 
     def initialize
       Psych.add_domain_type 'include', 'include' do |_, value|
-        File.read(value)
+        content = File.read(value)
+
+        case File.extname(value)
+        when *%w[.yaml .yml .raml]
+          YAML.load(content)
+        else
+          content
+        end
       end
     end
 

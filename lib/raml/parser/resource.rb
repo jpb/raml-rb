@@ -11,6 +11,8 @@ module Raml
       extend Forwardable
       include Raml::Parser::Util
 
+      BASIC_ATTRIBUTES = %w[display_name description]
+
       METHODS = %w[get put post delete]
 
       attr_accessor :parent_node, :resource, :trait_names, :attributes
@@ -24,6 +26,7 @@ module Raml
         @parent_node = parent_node
         @resource = Raml::Resource.new(@parent_node, uri_partial)
         @attributes = prepare_attributes(attributes)
+
         apply_resource_type
         parse_attributes
         resource
@@ -37,6 +40,8 @@ module Raml
             case key
             when /^\//
               resource.resources << Raml::Parser::Resource.new(self).parse(resource, key, value)
+            when *BASIC_ATTRIBUTES
+              resource.send("#{key}=".to_sym, value)
             when *METHODS
               resource.methods << Raml::Parser::Method.new(self).parse(key, value)
             when 'is'
