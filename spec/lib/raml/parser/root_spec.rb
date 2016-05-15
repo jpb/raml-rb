@@ -14,6 +14,7 @@ describe Raml::Parser::Root do
     its(:base_uri_parameters) do
       should == {"environment" => { "description"=>"The deployed environment", "type"=>"String" }}
     end
+    its(:media_type) { should == "application/json" }
     its('resources.count') { should == 1 }
     its('resources.first.methods.count') { should == 2 }
     its('resources.first.methods.first.responses.count') { should == 0 }

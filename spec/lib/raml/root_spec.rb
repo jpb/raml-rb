@@ -39,4 +39,11 @@ describe Raml::Root do
     subject { root.base_uri_parameters }
     it { is_expected.to eq('') }
   end
+
+  describe '#media_type' do
+    let(:root) { Raml::Root.new }
+    before { root.base_uri_parameters = 'application/json' }
+    subject { root.media_type }
+    it { is_expected.to eq('application/json') }
+  end
 end
