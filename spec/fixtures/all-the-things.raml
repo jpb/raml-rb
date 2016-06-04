@@ -12,6 +12,16 @@ documentation:
   - title: RAML Baml
     content: |
       - Project: [source code](https://github.com/jpb/raml-rb)
+securedBy: [ authenticationHeader ]
+securitySchemes:
+  - authenticationHeader
+    describedBy:
+      headers:
+        Authorization:
+          type: string
+        responses:
+          401:
+            description: Authentication required
 traits:
   - paged:
       queryParameters:
