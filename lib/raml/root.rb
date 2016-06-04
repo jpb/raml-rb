@@ -1,7 +1,7 @@
 module Raml
   class Root
     attr_accessor :title, :base_uri, :version, :resources, :documentation,
-                  :base_uri_parameters, :media_type
+                  :base_uri_parameters, :media_type, :security_schemes, :secured_by
 
     def initialize
       @resources = []

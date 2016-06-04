@@ -8,6 +8,16 @@ baseUriParameters:
     type: String
 version: v1
 mediaType: application/json
+securedBy: [ authenticationHeader ]
+securitySchemes:
+  - authenticationHeader:
+    describedBy:
+      headers:
+        Authorization:
+          type: string
+        responses:
+          401:
+            description: Authentication required
 traits:
   - paged:
       queryParameters:

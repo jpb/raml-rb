@@ -40,6 +40,20 @@ describe Raml::Root do
     it { is_expected.to eq('') }
   end
 
+  describe '#security_schemes' do
+    let(:root) { Raml::Root.new }
+    before { root.security_schemes = 'foo' }
+    subject { root.security_schemes }
+    it { is_expected.to eq('foo') }
+  end
+
+  describe '#secured_by' do
+    let(:root) { Raml::Root.new }
+    before { root.secured_by = [ 'oauth_2_0' ] }
+    subject { root.secured_by }
+    it { is_expected.to eq([ 'oauth_2_0' ]) }
+  end
+
   describe '#media_type' do
     let(:root) { Raml::Root.new }
     before { root.media_type = 'application/json' }

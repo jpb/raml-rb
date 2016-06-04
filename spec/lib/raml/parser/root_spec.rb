@@ -15,6 +15,7 @@ describe Raml::Parser::Root do
       should == {"environment" => { "description"=>"The deployed environment", "type"=>"String" }}
     end
     its(:media_type) { should == "application/json" }
+    its(:secured_by) { should == [ "authenticationHeader" ] }
     its('resources.count') { should == 1 }
     its('resources.first.methods.count') { should == 2 }
     its('resources.first.methods.first.responses.count') { should == 0 }
