@@ -11,7 +11,7 @@ module Raml
       extend Forwardable
       include Raml::Parser::Util
 
-      METHODS = %w[get put post delete]
+      HTTP_METHODS = %w[get put post delete]
 
       attr_accessor :parent_node, :resource, :trait_names, :attributes
       def_delegators :@parent, :traits, :resource_types
@@ -37,8 +37,8 @@ module Raml
             case key
             when /^\//
               resource.resources << Raml::Parser::Resource.new(self).parse(resource, key, value)
-            when *METHODS
-              resource.methods << Raml::Parser::Method.new(self).parse(key, value)
+            when *HTTP_METHODS
+              resource.http_methods << Raml::Parser::Method.new(self).parse(key, value)
             when 'is'
               @trait_names = value
             else

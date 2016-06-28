@@ -7,7 +7,7 @@ describe Raml::Resource do
     subject { Raml::Resource.new(parent, '/cats') }
     its(:parent) { should == parent }
     its(:uri_partial) { should == '/cats' }
-    its(:methods) { should == [] }
+    its(:http_methods) { should == [] }
   end
 
   describe '#uri' do
