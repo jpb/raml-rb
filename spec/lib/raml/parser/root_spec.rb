@@ -17,23 +17,23 @@ describe Raml::Parser::Root do
     its(:media_type) { should == "application/json" }
     its(:secured_by) { should == [ "authenticationHeader" ] }
     its('resources.count') { should == 1 }
-    its('resources.first.methods.count') { should == 2 }
-    its('resources.first.methods.first.responses.count') { should == 0 }
-    its('resources.first.methods.first.query_parameters.count') { should == 2 }
+    its('resources.first.http_methods.count') { should == 2 }
+    its('resources.first.http_methods.first.responses.count') { should == 0 }
+    its('resources.first.http_methods.first.query_parameters.count') { should == 2 }
     its('documentation.count') { should == 0 }
-    its('resources.first.resources.first.methods.first.responses.first.bodies.first.example') do
+    its('resources.first.resources.first.http_methods.first.responses.first.bodies.first.example') do
       should include '{"artist":"Pink Floyd", "title":"Wish You Were Here"}'
     end
 
     context 'trait-inherited attributes' do
-      subject { Raml::Parser::Root.new.parse(raml).resources.first.methods.first.query_parameters.first }
+      subject { Raml::Parser::Root.new.parse(raml).resources.first.http_methods.first.query_parameters.first }
       its(:name) { should == 'pages' }
       its(:description) { should == 'The number of pages to return' }
       its(:type) { should == 'number' }
     end
 
     context 'non trait-inherited attributes' do
-      subject { Raml::Parser::Root.new.parse(raml).resources.first.methods.first.query_parameters.last }
+      subject { Raml::Parser::Root.new.parse(raml).resources.first.http_methods.first.query_parameters.last }
       its(:name) { should == 'genre' }
       its(:description) { should == 'filter the songs by genre' }
       its(:type) { should == nil }
