@@ -49,7 +49,7 @@ module Raml
 
         def parse_documentation(documentations)
           documentations.each do |documentation_attributes|
-            root.documentations << Raml::Parser::Documentation.new.parse(documentation_attributes)
+            root.documentation << Raml::Parser::Documentation.new.parse(documentation_attributes)
           end
         end
 
