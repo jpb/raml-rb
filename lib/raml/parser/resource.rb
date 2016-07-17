@@ -41,6 +41,8 @@ module Raml
               resource.http_methods << Raml::Parser::Method.new(self).parse(key, value)
             when 'is'
               @trait_names = value
+            when 'uri_parameters'
+              @uri_parameters = value
             else
               raise UnknownAttributeError.new "Unknown resource key: #{key}"
             end

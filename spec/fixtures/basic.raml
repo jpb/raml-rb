@@ -35,6 +35,9 @@ traits:
         description: filter the songs by genre
   post:
   /{songId}:
+    uriParameters:
+      songId:
+        type: integer
     get:
       responses:
         200:
