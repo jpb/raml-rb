@@ -7,7 +7,7 @@ module Raml
     class Body
       include Raml::Parser::Util
 
-      BASIC_ATTRIBUTES = %w[schema example]
+      BASIC_ATTRIBUTES = %w[schema example type]
 
       attr_accessor :body, :attributes
 
