@@ -26,6 +26,13 @@ describe Raml::Root do
     it { is_expected.to eq('My RAML') }
   end
 
+  describe '#types' do
+    let(:root) { Raml::Root.new }
+    before { root.types = { "Foo" => { "bar" => "baz" } } }
+    subject { root.types }
+    it { is_expected.to eq({ "Foo" => { "bar" => "baz" } }) }
+  end
+
   describe '#version' do
     let(:root) { Raml::Root.new }
     before { root.version = '1.0' }

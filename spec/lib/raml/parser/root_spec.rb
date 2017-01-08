@@ -38,6 +38,23 @@ describe Raml::Parser::Root do
       its(:description) { should == 'filter the songs by genre' }
       its(:type) { should == nil }
     end
+
+    context 'using RAML types' do
+      let(:raml) { YAML.load File.read('spec/fixtures/basic_raml_with_types.raml') }
+      subject { Raml::Parser::Root.new.parse(raml) }
+
+      it { is_expected.to be_kind_of Raml::Root }
+      its(:base_uri) { should == 'http://api.e-bookmobile.com/{version}' }
+      its(:uri) { should == 'http://api.e-bookmobile.com/v1' }
+      its(:version) { should == 'v1' }
+      its(:media_type) { should be_nil }
+      its('resources.count') { should == 1 }
+      its('resources.first.http_methods.count') { should == 1 }
+      its('resources.first.http_methods.first.responses.count') { should == 1 }
+      its('resources.first.http_methods.first.query_parameters.count') { should == 0 }
+      its('documentation.count') { should == 0 }
+      its('resources.first.http_methods.first.responses.first.bodies.first.type') { should == 'Authors' }
+    end
   end
 
 end
