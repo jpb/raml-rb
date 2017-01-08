@@ -1,0 +1,50 @@
+#%RAML 0.8
+---
+title: e-BookMobile API
+baseUri: http://api.e-bookmobile.com/{version}
+version: 1.2
+
+schemas:
+  Author: |
+    {
+      "$schema": "http://json-schema.org/schema",
+      "type": "object",
+      "description: "An author",
+      "properties": {
+        "id": { "type": "integer" },
+        "first_name": { "type": "string" },
+        "last_name": { "type": "string" },
+        "year_of_birth": {
+          "type": "integer",
+          "maxValue": 2017
+        }
+      },
+      "required": [ "first_name", "last_name" ]
+    }
+  Authors: |
+    {
+      "$schema": "http://json-schema.org/schema",
+      "type": "array",
+      "description": "A list of authors",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "year_of_birth": {
+            "type": "integer",
+            "maxValue": 2017
+          }
+        }
+      }
+    }
+
+/authors:
+  post:
+    description: Add a new author to the system
+    responses:
+      204:
+        body:
+          application/json:
+            schema: Authors
