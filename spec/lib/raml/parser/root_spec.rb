@@ -55,6 +55,22 @@ describe Raml::Parser::Root do
       its('documentation.count') { should == 0 }
       its('resources.first.http_methods.first.responses.first.bodies.first.type') { should == 'Authors' }
     end
-  end
 
+    context 'using schemas' do
+      let(:raml) { YAML.load File.read('spec/fixtures/basic_raml_with_schemas.raml') }
+      subject { Raml::Parser::Root.new.parse(raml) }
+
+      it { is_expected.to be_kind_of Raml::Root }
+      its(:base_uri) { should == 'http://api.e-bookmobile.com/{version}' }
+      its(:uri) { should == 'http://api.e-bookmobile.com/1.2' }
+      its(:version) { should == 1.2 }
+      its(:media_type) { should be_nil }
+      its('resources.count') { should == 1 }
+      its('resources.first.http_methods.count') { should == 1 }
+      its('resources.first.http_methods.first.responses.count') { should == 1 }
+      its('resources.first.http_methods.first.query_parameters.count') { should == 0 }
+      its('documentation.count') { should == 0 }
+      its('resources.first.http_methods.first.responses.first.bodies.first.schema') { should == 'Authors' }
+    end
+  end
 end

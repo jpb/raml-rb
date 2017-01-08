@@ -24,11 +24,10 @@ traits:
         pages:
           description: The number of pages to return
           type: number
-  - secured: !include http://raml-example.com/secured.yml
   - notApplied:
       fake: value
 /songs:
-  is: [ paged, secured ]
+  is: [ paged ]
   get:
     queryParameters:
       genre:
