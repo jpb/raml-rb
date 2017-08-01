@@ -1,6 +1,7 @@
 module Raml
   class Resource
-    attr_accessor :parent, :http_methods, :uri_partial, :resources
+    attr_accessor :parent, :http_methods, :uri_partial, :resources,
+                  :display_name, :description
 
     def initialize(parent, uri_partial)
       @parent       = parent

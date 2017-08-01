@@ -25,6 +25,8 @@ module Raml
             case key
             when 'body'
               parse_bodies(value)
+            when 'description'
+              response.description = value
             else
               raise UnknownAttributeError.new "Unknown response key: #{key}"
             end

@@ -13,6 +13,8 @@ module Raml
 
       HTTP_METHODS = %w[get put post delete]
 
+      BASIC_ATTRIBUTES = %w[display_name description]
+
       attr_accessor :parent_node, :resource, :trait_names, :attributes
       def_delegators :@parent, :traits, :resource_types
 
@@ -39,6 +41,8 @@ module Raml
               resource.resources << Raml::Parser::Resource.new(self).parse(resource, key, value)
             when *HTTP_METHODS
               resource.http_methods << Raml::Parser::Method.new(self).parse(key, value)
+            when *BASIC_ATTRIBUTES
+              resource.send("#{key}=", value)
             when 'is'
               @trait_names = value
             when 'uri_parameters'
