@@ -27,8 +27,12 @@ traits:
   - notApplied:
       fake: value
 /songs:
+  displayName: Songs
+  description: Songs are really cool things
   is: [ paged ]
   get:
+    displayName: List songs
+    description: You might want to list songs.
     queryParameters:
       genre:
         description: filter the songs by genre
@@ -40,6 +44,7 @@ traits:
     get:
       responses:
         200:
+          description: A song is returned.
           body:
             application/json:
               schema: |

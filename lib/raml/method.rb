@@ -1,7 +1,8 @@
 module Raml
   class Method
 
-    attr_accessor :method, :description, :headers, :responses, :query_parameters, :bodies
+    attr_accessor :method, :description, :headers, :responses,
+                  :query_parameters, :bodies, :display_name
 
     def initialize(method)
       @method = method
