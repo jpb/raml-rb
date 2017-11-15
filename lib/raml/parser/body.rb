@@ -8,6 +8,7 @@ module Raml
       include Raml::Parser::Util
 
       BASIC_ATTRIBUTES = %w[schema example type]
+      IGNORED_ATTRIBUTES = %w[properties default]
 
       attr_accessor :body, :attributes
 
@@ -25,6 +26,8 @@ module Raml
         def parse_attributes
           attributes.each do |key, value|
             case key
+            when *IGNORED_ATTRIBUTES
+              # nothing
             when *BASIC_ATTRIBUTES
               body.send("#{key}=".to_sym, value)
             else
