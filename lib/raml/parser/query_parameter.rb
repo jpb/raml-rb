@@ -8,6 +8,7 @@ module Raml
       include Raml::Parser::Util
 
       BASIC_ATTRIBUTES = %w[description type example required]
+      IGNORED_ATTRIBUTES = %w[properties default]
 
       attr_accessor :query_parameter, :attributes
 
@@ -26,6 +27,8 @@ module Raml
           attributes.each do |key, value|
             key = underscore(key)
             case key
+            when *IGNORED_ATTRIBUTES
+              # nothing
             when *BASIC_ATTRIBUTES
               query_parameter.send("#{key}=".to_sym, value)
             else
